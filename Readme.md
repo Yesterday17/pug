@@ -5,7 +5,7 @@
     <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" placeholder="License: GPL v3" title="PUG">
   </a>
   <a href="https://www.gnu.org/licenses/gpl-3.0">
-    <img src="https://img.shields.io/badge/License-MIT-green.svg" placeholder="License: MIT" title="Tests&Examples">
+    <img src="https://img.shields.io/badge/License-MIT-green.svg" placeholder="License: MIT" title="API&Tests&Examples">
   </a>
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
     <img src="https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg" placeholder="License: CC BY-NC-SA 4.0" title="Documents">
@@ -36,8 +36,8 @@ go get github.com/Yesterday17/pug/main/pugd
 
 The following tables shows what license which part uses.
 
-| Part               | License         |
-| ------------------ | --------------- |
-| PUG                | GPLv3           |
-| Tests and Examples | MIT             |
-| Documents          | CC-BY-NC-SA 4.0 |
+| Part                    | License         |
+| ----------------------- | --------------- |
+| PUG                     | GPLv3           |
+| API, Tests and Examples | MIT             |
+| Documents               | CC-BY-NC-SA 4.0 |
