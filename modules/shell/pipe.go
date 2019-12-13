@@ -25,17 +25,23 @@ import (
 )
 
 func (s *shell) Meta() api.Metadata {
-	return nil
+	if s.prev == nil {
+		return nil
+	}
+	return s.prev.Meta()
 }
 
 func (s *shell) Media() api.Media {
-	return nil
+	if s.prev == nil {
+		return nil
+	}
+	return s.prev.Media()
 }
 
 func (s *shell) Do(prev api.Pipe) {
+	s.prev = prev
 	s.PStatus = api.PipeWorking
 
-	// TODO: Use prev as input
 	cmd := exec.Command(s.command, s.args...)
 	output, err := cmd.Output()
 	if err != nil {

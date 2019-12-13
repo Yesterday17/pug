@@ -26,9 +26,15 @@ import (
 func main() {
 	pl := api.NewLinearPipeline()
 	// TODO: Remove test
-	pl.Append(modules.Modules["shell"](map[string]interface{}{
-		"cmd":  "date",
-		"args": []string{},
-	}).(api.Pipe))
+	pl.Append(
+		modules.Modules["shell"](map[string]interface{}{
+			"cmd":  "date",
+			"args": []string{},
+		}).(api.Pipe),
+		modules.Modules["shell"](map[string]interface{}{
+			"cmd":  "pidof",
+			"args": []string{"systemd"},
+		}).(api.Pipe),
+	)
 	pl.Run()
 }

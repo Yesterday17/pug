@@ -36,8 +36,10 @@ func NewLinearPipeline() Pipeline {
 	}
 }
 
-func (l *linearPipeline) Append(p Pipe) {
-	l.line.PushBack(p)
+func (l *linearPipeline) Append(p ...Pipe) {
+	for _, pipe := range p {
+		l.line.PushBack(pipe)
+	}
 }
 
 func (l *linearPipeline) Run() {

@@ -25,6 +25,6 @@ SOFTWARE.
 package api
 
 type Pipeline interface {
-	Append(p Pipe)
+	Append(p ...Pipe)
 	Run()
 }

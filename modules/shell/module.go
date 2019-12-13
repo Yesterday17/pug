@@ -25,6 +25,8 @@ type shell struct {
 
 	command string
 	args    []string
+
+	prev api.Pipe
 }
 
 func (s *shell) Name() string {
@@ -32,7 +34,7 @@ func (s *shell) Name() string {
 }
 
 func (s *shell) Description() string {
-	return "Shell module."
+	return "It does nothing to pipe contents, but just runs a command."
 }
 
 func (s *shell) Author() []string {
@@ -52,5 +54,6 @@ func NewShell(args map[string]interface{}) interface{} {
 		},
 		command: args["cmd"].(string),
 		args:    args["args"].([]string),
+		prev:    nil,
 	}
 }
