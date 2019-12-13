@@ -24,22 +24,31 @@ SOFTWARE.
 
 package api
 
-import "strings"
+type PipeStatus int
+type PipeType int
 
-// TODO: Finish Module Template
-const moduleTemplate = ""
+const (
+	FilterPipe   PipeType = 0
+	SourcePipe   PipeType = 1
+	EndpointPipe PipeType = 2
 
-type Module interface {
-	Name() string
-	Description() string
-	Author() []string
+	PipeWaiting PipeStatus = 0
+	PipeWorking PipeStatus = 1
+	PipeSuccess PipeStatus = 2
+	PipeError   PipeStatus = 3
+)
 
-	Auth() error
+type Pipe interface {
+	Type() PipeType
+	Status() PipeStatus
+
+	Meta() Metadata
+	Media() Media
+
+	Do(prev Pipe)
 }
 
-// FIXME: Repalce with text template
-func ModuleInfo(m Module) string {
-	return m.Name() + "\n" +
-		"Author(s): " + strings.Join(m.Author(), ", ") +
-		"Description: " + m.Description()
+type EndPointPipe interface {
+	Pipe
+	PipeOut() error
 }
