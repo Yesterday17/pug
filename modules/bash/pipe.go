@@ -27,7 +27,7 @@ import (
 
 func (s *shell) Meta() api.Metadata {
 	if s.prev == nil {
-		return nil
+		return api.Metadata{}
 	}
 	return s.prev.Meta()
 }
@@ -45,7 +45,13 @@ func (s *shell) Do(prev api.Pipe, pl api.Pipeline) {
 
 	// Environmental Variables
 	PUGPrevMedia := "PUG_PREV_MEDIA="
-	PUGPrevMeta := "PUG_PREV_META="
+	PUGPrevMeta, err := pl.TempDir().NewContentFile(prev.Meta().Serialize(), ".conf")
+	// TODO: Embed error handle in api
+	if err != nil {
+		log.Error(err.Error())
+		s.PStatus = api.PipeError
+		return
+	}
 	PUGOutputMedia := pl.TempDir().NewFile(".conf")
 	PUGOutputMeta := pl.TempDir().NewFile(".conf")
 
@@ -53,7 +59,7 @@ func (s *shell) Do(prev api.Pipe, pl api.Pipeline) {
 	cmd.Env = append(os.Environ(),
 		"PUG_VERSION="+api.VERSION,
 		PUGPrevMedia,
-		PUGPrevMeta,
+		"PUG_PREV_META="+PUGPrevMeta,
 		"PUG_OUTPUT_MEDIA="+PUGOutputMedia,
 		"PUG_OUTPUT_META="+PUGOutputMeta,
 	)

@@ -53,7 +53,7 @@ func (l *linearPipeline) Append(p ...Pipe) {
 }
 
 func (l *linearPipeline) Run() {
-	var prev Pipe = nil
+	var prev Pipe = &EmptyPipe
 	for l.line.Len() > 0 {
 		current := l.line.Front()
 		l.line.Remove(current)

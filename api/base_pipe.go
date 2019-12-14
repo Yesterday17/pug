@@ -24,6 +24,8 @@ SOFTWARE.
 
 package api
 
+var EmptyPipe = BasePipe{}
+
 type BasePipe struct {
 	PStatus PipeStatus
 }

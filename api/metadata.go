@@ -24,6 +24,8 @@ SOFTWARE.
 
 package api
 
+import "github.com/Yesterday17/pug/utils/conf"
+
 type Metadata struct {
 	Title       string `conf:"title"`
 	Author      string `conf:"author"`
@@ -35,4 +37,8 @@ type Metadata struct {
 
 	From        string
 	ReleaseTime string `conf:"release"`
+}
+
+func (m Metadata) Serialize() string {
+	return conf.Serialize(m)
 }

@@ -45,3 +45,11 @@ func (d Dir) NewFile(ext string) string {
 	rand.Read(randBytes)
 	return filepath.Join(string(d), hex.EncodeToString(randBytes)+ext)
 }
+
+func (d Dir) NewContentFile(content string, ext string) (string, error) {
+	file := d.NewFile(ext)
+	if err := ioutil.WriteFile(file, []byte(content), 0644); err != nil {
+		return "", err
+	}
+	return file, nil
+}
