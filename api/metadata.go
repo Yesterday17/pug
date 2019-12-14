@@ -24,24 +24,15 @@ SOFTWARE.
 
 package api
 
-type BasePipe struct {
-	PStatus PipeStatus
-}
+type Metadata struct {
+	Title       string `conf:"title"`
+	Author      string `conf:"author"`
+	Description string `conf:"desc"`
+	Cover       string `conf:"cover"`
 
-func (p *BasePipe) Type() PipeType {
-	return FilterPipe
-}
+	Link  string `conf:"link"`
+	Short string `conf:"short"`
 
-func (p *BasePipe) Status() PipeStatus {
-	return p.PStatus
+	From        string
+	ReleaseTime string `conf:"release"`
 }
-
-func (p *BasePipe) Meta() Metadata {
-	return Metadata{}
-}
-
-func (p *BasePipe) Media() Media {
-	return nil
-}
-
-func (p *BasePipe) Do(prev Pipe, pl Pipeline) {}

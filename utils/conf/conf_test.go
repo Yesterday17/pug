@@ -22,26 +22,41 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package api
+package conf
 
-type BasePipe struct {
-	PStatus PipeStatus
+import (
+	"fmt"
+	"github.com/Yesterday17/pug/api"
+	"testing"
+)
+
+func TestSerialize(t *testing.T) {
+	result := Serialize(api.Metadata{
+		Title:       "123",
+		Author:      "456",
+		Description: "78910",
+		Cover:       "111213",
+		Link:        "123",
+		Short:       "456",
+		From:        "78910",
+		ReleaseTime: "111213",
+	})
+
+	if result != "title=123\nauthor=456\ndesc=78910\ncover=111213\nlink=123\nshort=456\nFrom=78910\nrelease=111213\n" {
+		t.Error(result)
+	}
 }
 
-func (p *BasePipe) Type() PipeType {
-	return FilterPipe
-}
+func TestDeserialize(t *testing.T) {
+	var s api.Metadata
+	err := Deserialize("", s)
+	if err == nil {
+		t.Error("Passing non-pointer value should throw an error!")
+	}
 
-func (p *BasePipe) Status() PipeStatus {
-	return p.PStatus
+	err = Deserialize("title=123\nauthor=456\ndesc=78910\ncover=111213\nlink=123\nshort=456\nFrom=78910\nrelease=111213\n", &s)
+	if err != nil {
+		t.Error(err)
+	}
+	fmt.Println(s)
 }
-
-func (p *BasePipe) Meta() Metadata {
-	return Metadata{}
-}
-
-func (p *BasePipe) Media() Media {
-	return nil
-}
-
-func (p *BasePipe) Do(prev Pipe, pl Pipeline) {}

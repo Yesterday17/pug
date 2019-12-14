@@ -24,11 +24,7 @@ PUG is a simple porter which helps you migrate videos between different places.
 You can download precompiled version in [releases](releases), or just use `go get` go get this program:
 
 ```bash
-# PUG-cli
-go get github.com/Yesterday17/pug/main/pug
-
-# PUGd
-go get github.com/Yesterday17/pug/main/pugd
+go get github.com/Yesterday17/pug
 ```
 
 ## Usage
