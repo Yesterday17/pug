@@ -24,24 +24,6 @@ SOFTWARE.
 
 package api
 
-type BasePipe struct {
-	PStatus PipeStatus
-}
-
-func (p *BasePipe) Type() PipeType {
-	return FilterPipe
-}
-
-func (p *BasePipe) Status() PipeStatus {
-	return p.PStatus
-}
-
-func (p *BasePipe) Meta() Metadata {
-	return nil
-}
-
-func (p *BasePipe) Media() Media {
-	return nil
-}
-
-func (p *BasePipe) Do(prev Pipe, pl Pipeline) {}
+const (
+	VERSION = "0.0.1"
+)

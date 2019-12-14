@@ -21,6 +21,7 @@ package shell
 import (
 	"github.com/Yesterday17/pug/api"
 	"github.com/Yesterday17/pug/utils/log"
+	"os"
 	"os/exec"
 )
 
@@ -38,11 +39,24 @@ func (s *shell) Media() api.Media {
 	return s.prev.Media()
 }
 
-func (s *shell) Do(prev api.Pipe) {
+func (s *shell) Do(prev api.Pipe, pl api.Pipeline) {
 	s.prev = prev
 	s.PStatus = api.PipeWorking
 
-	cmd := exec.Command(s.command, s.args...)
+	// Environmental Variables
+	PUGPrevMedia := "PUG_PREV_MEDIA="
+	PUGPrevMeta := "PUG_PREV_META="
+	PUGOutputMedia := pl.TempDir().NewFile(".conf")
+	PUGOutputMeta := pl.TempDir().NewFile(".conf")
+
+	cmd := exec.Command("bash", "-c", s.command)
+	cmd.Env = append(os.Environ(),
+		"PUG_VERSION="+api.VERSION,
+		PUGPrevMedia,
+		PUGPrevMeta,
+		"PUG_OUTPUT_MEDIA="+PUGOutputMedia,
+		"PUG_OUTPUT_META="+PUGOutputMeta,
+	)
 	output, err := cmd.Output()
 	if err != nil {
 		log.Error(err.Error())

@@ -22,11 +22,9 @@ import "github.com/Yesterday17/pug/api"
 
 type shell struct {
 	api.BasePipe
+	prev api.Pipe
 
 	command string
-	args    []string
-
-	prev api.Pipe
 }
 
 func (s *shell) Name() string {
@@ -53,7 +51,6 @@ func NewShell(args map[string]interface{}) interface{} {
 			PStatus: api.PipeWaiting,
 		},
 		command: args["cmd"].(string),
-		args:    args["args"].([]string),
 		prev:    nil,
 	}
 }

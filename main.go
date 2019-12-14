@@ -24,16 +24,19 @@ import (
 )
 
 func main() {
-	pl := api.NewLinearPipeline()
+	pl, err := api.NewLinearPipeline()
+	if err != nil {
+		panic(err)
+	}
+	defer pl.TempDir().Clear()
+
 	// TODO: Remove test
 	pl.Append(
 		modules.Modules["shell"](map[string]interface{}{
-			"cmd":  "date",
-			"args": []string{},
+			"cmd": "date",
 		}).(api.Pipe),
 		modules.Modules["shell"](map[string]interface{}{
-			"cmd":  "pidof",
-			"args": []string{"systemd"},
+			"cmd": "echo \"version: $PUG_VERSION\"\necho \"output media: $PUG_OUTPUT_MEDIA\"",
 		}).(api.Pipe),
 	)
 	pl.Run()

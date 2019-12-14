@@ -24,7 +24,11 @@ SOFTWARE.
 
 package api
 
+import "github.com/Yesterday17/pug/utils/temp"
+
 type Pipeline interface {
 	Append(p ...Pipe)
 	Run()
+
+	TempDir() temp.Dir
 }

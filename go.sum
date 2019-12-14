@@ -1,7 +1,3 @@
-github.com/Yesterday17/pug/utils/log v0.0.0-20191213143103-a00b7109a311 h1:AJFmzVqTqNtNsgcSAlibSNdbFM2K5d0xhj3cIyGs86k=
-github.com/Yesterday17/pug/utils/log v0.0.0-20191213143103-a00b7109a311/go.mod h1:VN2LFXIdOXo+d7x6PmAhRlT/RNkYdEb+0c/Pf1qsTCw=
-github.com/Yesterday17/pug/utils/net v0.0.0-20191212153011-3790dabf903e h1:M4WqS/tayVXM1yyF9l9pZGCtw/tzlAtUV2NkL/Y7GHA=
-github.com/Yesterday17/pug/utils/net v0.0.0-20191212153011-3790dabf903e/go.mod h1:rkE7W6OfnT1y6g8qweEKZYW1ekQhj1x7tneHcgrqGFI=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

@@ -45,7 +45,7 @@ type Pipe interface {
 	Meta() Metadata
 	Media() Media
 
-	Do(prev Pipe)
+	Do(prev Pipe, pl Pipeline)
 }
 
 type EndPointPipe interface {
