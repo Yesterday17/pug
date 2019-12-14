@@ -18,12 +18,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 package modules
 
-import (
-	"github.com/Yesterday17/pug/modules/shell"
-)
+import "github.com/Yesterday17/pug/modules/bash"
 
 type NewFunc func(args map[string]interface{}) interface{}
 
 var Modules = map[string]NewFunc{
-	"shell": shell.NewShell,
+	"bash": bash.NewBash,
 }

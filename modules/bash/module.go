@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package shell
+package bash
 
 import "github.com/Yesterday17/pug/api"
 
@@ -45,7 +45,7 @@ func (s *shell) Auth() error {
 	return nil
 }
 
-func NewShell(args map[string]interface{}) interface{} {
+func NewBash(args map[string]interface{}) interface{} {
 	return &shell{
 		BasePipe: api.BasePipe{
 			PStatus: api.PipeWaiting,

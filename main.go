@@ -32,10 +32,10 @@ func main() {
 
 	// TODO: Remove test
 	pl.Append(
-		modules.Modules["shell"](map[string]interface{}{
+		modules.Modules["bash"](map[string]interface{}{
 			"cmd": "date",
 		}).(api.Pipe),
-		modules.Modules["shell"](map[string]interface{}{
+		modules.Modules["bash"](map[string]interface{}{
 			"cmd": "echo \"version: $PUG_VERSION\"\necho \"output media: $PUG_OUTPUT_MEDIA\"",
 		}).(api.Pipe),
 	)
