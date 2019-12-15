@@ -21,6 +21,9 @@ package main
 import (
 	"github.com/Yesterday17/pug/api"
 	"github.com/Yesterday17/pug/modules"
+	"github.com/Yesterday17/pug/utils/arg"
+	"github.com/Yesterday17/pug/utils/log"
+	"os"
 )
 
 func main() {
@@ -30,14 +33,28 @@ func main() {
 	}
 	defer pl.TempDir().Clear()
 
-	// TODO: Remove test
-	pl.Append(
-		modules.Modules["bash"](map[string]interface{}{
-			"cmd": "date",
-		}).(api.Pipe),
-		modules.Modules["bash"](map[string]interface{}{
-			"cmd": "echo \"version: $PUG_VERSION\"\necho \"output media: $PUG_OUTPUT_MEDIA\"",
-		}).(api.Pipe),
-	)
-	pl.Run()
+	// [program] [url] [module], no arg
+	if len(os.Args) < 3 {
+		// TODO: Show Usage
+		return
+	}
+
+	start := os.Args[1]
+	ps := arg.ParseArgs(os.Args[2:])
+	if ps == nil {
+		// TODO: Show Usage
+		return
+	}
+
+	for _, p := range ps {
+		name := p["module"].(string)
+		m, ok := modules.Modules[name]
+		if !ok {
+			log.Fatalf("No module named %s found!\n", name)
+			return
+		}
+		pl.Append(m(p).(api.Pipe))
+	}
+
+	pl.RunWith(start)
 }

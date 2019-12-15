@@ -26,6 +26,7 @@ package api
 
 import (
 	"container/list"
+	"github.com/Yesterday17/pug/utils/log"
 	"github.com/Yesterday17/pug/utils/temp"
 )
 
@@ -52,9 +53,14 @@ func (l *linearPipeline) Append(p ...Pipe) {
 	}
 }
 
-func (l *linearPipeline) Run() {
-	var prev Pipe = &EmptyPipe
+func (l *linearPipeline) Run(p Pipe) {
+	var prev = p
 	for l.line.Len() > 0 {
+		if prev.Status() == PipeError {
+			log.Fatalf("Pipeline has met an error in pipe %s, program terminated.\n", prev.(interface{}).(Module).Name())
+			break
+		}
+
 		current := l.line.Front()
 		l.line.Remove(current)
 
@@ -66,6 +72,17 @@ func (l *linearPipeline) Run() {
 			break
 		}
 	}
+	if prev.Status() == PipeError {
+		log.Fatalf("Pipeline has met an error in the last pipe %s, procedure may be unsuccessful.\n", prev.(interface{}).(Module).Name())
+	}
+}
+
+func (l *linearPipeline) RunWith(start string) {
+	l.Run(&BasePipe{
+		PStatus:   PipeSuccess,
+		Metadata:  Metadata{Link: start},
+		MediaData: Media{},
+	})
 }
 
 func (l *linearPipeline) TempDir() temp.Dir {

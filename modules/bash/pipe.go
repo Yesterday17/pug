@@ -27,6 +27,10 @@ import (
 )
 
 func (s *shell) Do(prev api.Pipe, pl api.Pipeline) {
+	if s.command == "" {
+		return
+	}
+
 	s.PStatus = api.PipeWorking
 	s.Metadata = prev.Meta()
 	s.MediaData = prev.Media()

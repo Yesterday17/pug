@@ -18,7 +18,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 package bash
 
-import "github.com/Yesterday17/pug/api"
+import (
+	"github.com/Yesterday17/pug/api"
+	"github.com/Yesterday17/pug/utils/log"
+)
 
 type shell struct {
 	api.BasePipe
@@ -45,10 +48,15 @@ func (s *shell) Auth() error {
 }
 
 func NewBash(args map[string]interface{}) interface{} {
+	cmd := args["cmd"]
+	if args["cmd"] == nil || args["cmd"].(string) == "" {
+		log.Fatalf("[Bash] No command provided!\n")
+		cmd = ""
+	}
 	return &shell{
 		BasePipe: api.BasePipe{
-			PStatus: api.PipeWaiting,
+			PStatus: api.PipeError,
 		},
-		command: args["cmd"].(string),
+		command: cmd.(string),
 	}
 }
