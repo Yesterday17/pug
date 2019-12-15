@@ -19,6 +19,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package bash
 
 import (
+	"bufio"
 	"github.com/Yesterday17/pug/api"
 	"github.com/Yesterday17/pug/utils/conf"
 	"github.com/Yesterday17/pug/utils/log"
@@ -54,6 +55,33 @@ func (s *shell) Do(prev api.Pipe, pl api.Pipeline) {
 	PUGOutputMeta := pl.TempDir().NewFile(".conf")
 
 	cmd := exec.Command("bash", "-c", s.command)
+
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		log.Error(err.Error())
+		s.PStatus = api.PipeError
+		return
+	}
+	go func() {
+		scanner := bufio.NewScanner(stdout)
+		for scanner.Scan() {
+			log.Infof("%s\n", scanner.Text())
+		}
+	}()
+
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		log.Error(err.Error())
+		s.PStatus = api.PipeError
+		return
+	}
+	go func() {
+		scanner := bufio.NewScanner(stderr)
+		for scanner.Scan() {
+			log.Errorf("%s\n", scanner.Text())
+		}
+	}()
+
 	cmd.Env = append(os.Environ(),
 		"PUG_VERSION="+api.VERSION,
 		"PUG_PREV_MEDIA="+PUGPrevMedia,
@@ -61,13 +89,20 @@ func (s *shell) Do(prev api.Pipe, pl api.Pipeline) {
 		"PUG_OUTPUT_MEDIA="+PUGOutputMedia,
 		"PUG_OUTPUT_META="+PUGOutputMeta,
 	)
-	output, err := cmd.Output()
+
+	err = cmd.Start()
 	if err != nil {
 		log.Error(err.Error())
-		log.Error(string(output))
 		s.PStatus = api.PipeError
+		return
 	}
-	log.Info(string(output))
+
+	err = cmd.Wait()
+	if err != nil {
+		log.Error(err.Error())
+		s.PStatus = api.PipeError
+		return
+	}
 
 	// Load output file
 	// MENTION: NO ERROR HANDLE HERE

@@ -46,4 +46,8 @@ func (p *BasePipe) Media() Media {
 	return p.MediaData
 }
 
+func (p *BasePipe) Auth() error {
+	return nil
+}
+
 func (p *BasePipe) Do(prev Pipe, pl Pipeline) {}

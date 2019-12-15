@@ -33,8 +33,6 @@ type Module interface {
 	Name() string
 	Description() string
 	Author() []string
-
-	Auth() error
 }
 
 // FIXME: Repalce with text template

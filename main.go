@@ -33,7 +33,7 @@ func main() {
 	}
 	defer pl.TempDir().Clear()
 
-	// [program] [url] [module], no arg
+	// no module specified
 	if len(os.Args) < 3 {
 		// TODO: Show Usage
 		return

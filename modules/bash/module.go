@@ -43,10 +43,6 @@ func (s *shell) Author() []string {
 	}
 }
 
-func (s *shell) Auth() error {
-	return nil
-}
-
 func NewBash(args map[string]interface{}) interface{} {
 	cmd := args["cmd"]
 	if args["cmd"] == nil || args["cmd"].(string) == "" {

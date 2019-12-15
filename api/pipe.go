@@ -45,6 +45,7 @@ type Pipe interface {
 	Meta() Metadata
 	Media() Media
 
+	Auth() error
 	Do(prev Pipe, pl Pipeline)
 }
 
