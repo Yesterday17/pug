@@ -20,6 +20,7 @@ package conf
 
 import (
 	"errors"
+	"io/ioutil"
 	"reflect"
 	"strings"
 )
@@ -83,4 +84,13 @@ func Deserialize(s string, result interface{}) error {
 		}
 	}
 	return nil
+}
+
+func ReadAndDeserialize(path string, result interface{}) error {
+	m, err := ioutil.ReadFile(path)
+	if err != nil {
+		return err
+	}
+
+	return Deserialize(string(m), result)
 }

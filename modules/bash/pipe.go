@@ -20,31 +20,25 @@ package bash
 
 import (
 	"github.com/Yesterday17/pug/api"
+	"github.com/Yesterday17/pug/utils/conf"
 	"github.com/Yesterday17/pug/utils/log"
 	"os"
 	"os/exec"
 )
 
-func (s *shell) Meta() api.Metadata {
-	if s.prev == nil {
-		return api.Metadata{}
-	}
-	return s.prev.Meta()
-}
-
-func (s *shell) Media() api.Media {
-	if s.prev == nil {
-		return nil
-	}
-	return s.prev.Media()
-}
-
 func (s *shell) Do(prev api.Pipe, pl api.Pipeline) {
-	s.prev = prev
 	s.PStatus = api.PipeWorking
+	s.Metadata = prev.Meta()
+	s.MediaData = prev.Media()
 
 	// Environmental Variables
-	PUGPrevMedia := "PUG_PREV_MEDIA="
+	PUGPrevMedia, err := pl.TempDir().NewContentFile(prev.Media().Serialize(), ".conf")
+	// TODO: Embed error handle in api
+	if err != nil {
+		log.Error(err.Error())
+		s.PStatus = api.PipeError
+		return
+	}
 	PUGPrevMeta, err := pl.TempDir().NewContentFile(prev.Meta().Serialize(), ".conf")
 	// TODO: Embed error handle in api
 	if err != nil {
@@ -58,7 +52,7 @@ func (s *shell) Do(prev api.Pipe, pl api.Pipeline) {
 	cmd := exec.Command("bash", "-c", s.command)
 	cmd.Env = append(os.Environ(),
 		"PUG_VERSION="+api.VERSION,
-		PUGPrevMedia,
+		"PUG_PREV_MEDIA="+PUGPrevMedia,
 		"PUG_PREV_META="+PUGPrevMeta,
 		"PUG_OUTPUT_MEDIA="+PUGOutputMedia,
 		"PUG_OUTPUT_META="+PUGOutputMeta,
@@ -68,8 +62,14 @@ func (s *shell) Do(prev api.Pipe, pl api.Pipeline) {
 		log.Error(err.Error())
 		log.Error(string(output))
 		s.PStatus = api.PipeError
-	} else {
-		log.Info(string(output))
-		s.PStatus = api.PipeSuccess
 	}
+	log.Info(string(output))
+
+	// Load output file
+	// MENTION: NO ERROR HANDLE HERE
+	_ = conf.ReadAndDeserialize(PUGOutputMedia, &s.MediaData)
+	_ = conf.ReadAndDeserialize(PUGOutputMeta, &s.Metadata)
+
+	s.PStatus = api.PipeSuccess
+	return
 }

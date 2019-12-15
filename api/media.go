@@ -24,28 +24,12 @@ SOFTWARE.
 
 package api
 
-var EmptyPipe = BasePipe{}
+import "github.com/Yesterday17/pug/utils/conf"
 
-type BasePipe struct {
-	PStatus   PipeStatus
-	Metadata  Metadata
-	MediaData Media
+type Media struct {
+	Path string `conf:"path"`
 }
 
-func (p *BasePipe) Type() PipeType {
-	return FilterPipe
+func (m Media) Serialize() string {
+	return conf.Serialize(m)
 }
-
-func (p *BasePipe) Status() PipeStatus {
-	return p.PStatus
-}
-
-func (p *BasePipe) Meta() Metadata {
-	return p.Metadata
-}
-
-func (p *BasePipe) Media() Media {
-	return p.MediaData
-}
-
-func (p *BasePipe) Do(prev Pipe, pl Pipeline) {}

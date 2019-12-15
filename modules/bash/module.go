@@ -22,7 +22,6 @@ import "github.com/Yesterday17/pug/api"
 
 type shell struct {
 	api.BasePipe
-	prev api.Pipe
 
 	command string
 }
@@ -51,6 +50,5 @@ func NewBash(args map[string]interface{}) interface{} {
 			PStatus: api.PipeWaiting,
 		},
 		command: args["cmd"].(string),
-		prev:    nil,
 	}
 }
