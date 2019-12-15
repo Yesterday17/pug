@@ -27,39 +27,39 @@ import (
 	"os/exec"
 )
 
-func (s *shell) Do(prev api.Pipe, pl api.Pipeline) {
-	if s.command == "" {
+func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {
+	if m.Command == "" {
 		return
 	}
 
-	s.PStatus = api.PipeWorking
-	s.Metadata = prev.Meta()
-	s.MediaData = prev.Media()
+	m.PStatus = api.PipeWorking
+	m.Metadata = prev.Meta()
+	m.MediaData = prev.Media()
 
 	// Environmental Variables
 	PUGPrevMedia, err := pl.TempDir().NewContentFile(prev.Media().Serialize(), ".conf")
 	// TODO: Embed error handle in api
 	if err != nil {
-		log.Error(err.Error())
-		s.PStatus = api.PipeError
+		log.Errorf("%s\n", err.Error())
+		m.PStatus = api.PipeError
 		return
 	}
 	PUGPrevMeta, err := pl.TempDir().NewContentFile(prev.Meta().Serialize(), ".conf")
 	// TODO: Embed error handle in api
 	if err != nil {
-		log.Error(err.Error())
-		s.PStatus = api.PipeError
+		log.Errorf("%s\n", err.Error())
+		m.PStatus = api.PipeError
 		return
 	}
 	PUGOutputMedia := pl.TempDir().NewFile(".conf")
 	PUGOutputMeta := pl.TempDir().NewFile(".conf")
 
-	cmd := exec.Command("bash", "-c", s.command)
+	cmd := exec.Command("Module", "-c", m.Command)
 
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
-		log.Error(err.Error())
-		s.PStatus = api.PipeError
+		log.Errorf("%s\n", err.Error())
+		m.PStatus = api.PipeError
 		return
 	}
 	go func() {
@@ -72,13 +72,13 @@ func (s *shell) Do(prev api.Pipe, pl api.Pipeline) {
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
 		log.Error(err.Error())
-		s.PStatus = api.PipeError
+		m.PStatus = api.PipeError
 		return
 	}
 	go func() {
 		scanner := bufio.NewScanner(stderr)
 		for scanner.Scan() {
-			log.Errorf("%s\n", scanner.Text())
+			log.Errorf("%m\n", scanner.Text())
 		}
 	}()
 
@@ -92,23 +92,23 @@ func (s *shell) Do(prev api.Pipe, pl api.Pipeline) {
 
 	err = cmd.Start()
 	if err != nil {
-		log.Error(err.Error())
-		s.PStatus = api.PipeError
+		log.Errorf("%s\n", err.Error())
+		m.PStatus = api.PipeError
 		return
 	}
 
 	err = cmd.Wait()
 	if err != nil {
-		log.Error(err.Error())
-		s.PStatus = api.PipeError
+		log.Errorf("%s\n", err.Error())
+		m.PStatus = api.PipeError
 		return
 	}
 
 	// Load output file
 	// MENTION: NO ERROR HANDLE HERE
-	_ = conf.ReadAndDeserialize(PUGOutputMedia, &s.MediaData)
-	_ = conf.ReadAndDeserialize(PUGOutputMeta, &s.Metadata)
+	_ = conf.ReadAndDeserialize(PUGOutputMedia, &m.MediaData)
+	_ = conf.ReadAndDeserialize(PUGOutputMeta, &m.Metadata)
 
-	s.PStatus = api.PipeSuccess
+	m.PStatus = api.PipeSuccess
 	return
 }

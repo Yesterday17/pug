@@ -1,2 +1,7 @@
 .idea
 pug
+
+# Media types
+*.mp4
+*.mkv
+*.m4a

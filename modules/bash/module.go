@@ -23,21 +23,21 @@ import (
 	"github.com/Yesterday17/pug/utils/log"
 )
 
-type shell struct {
+type Module struct {
 	api.BasePipe
 
-	command string
+	Command string
 }
 
-func (s *shell) Name() string {
+func (m *Module) Name() string {
 	return "Shell"
 }
 
-func (s *shell) Description() string {
-	return "It does nothing to pipe contents, but just runs a command."
+func (m *Module) Description() string {
+	return "It does nothing to pipe contents, but just runs a Command."
 }
 
-func (s *shell) Author() []string {
+func (m *Module) Author() []string {
 	return []string{
 		"Yesterday17",
 	}
@@ -46,13 +46,13 @@ func (s *shell) Author() []string {
 func NewBash(args map[string]interface{}) interface{} {
 	cmd := args["cmd"]
 	if args["cmd"] == nil || args["cmd"].(string) == "" {
-		log.Fatalf("[Bash] No command provided!\n")
+		log.Fatalf("[Bash] No Command provided!\n")
 		cmd = ""
 	}
-	return &shell{
+	return &Module{
 		BasePipe: api.BasePipe{
 			PStatus: api.PipeError,
 		},
-		command: cmd.(string),
+		Command: cmd.(string),
 	}
 }
