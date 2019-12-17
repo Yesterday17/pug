@@ -78,7 +78,7 @@ func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {
 	go func() {
 		scanner := bufio.NewScanner(stderr)
 		for scanner.Scan() {
-			log.Errorf("%m\n", scanner.Text())
+			log.Errorf("%s\n", scanner.Text())
 		}
 	}()
 

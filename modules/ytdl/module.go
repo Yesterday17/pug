@@ -2,7 +2,6 @@ package ytdl
 
 import (
 	"github.com/Yesterday17/pug/api"
-	"github.com/Yesterday17/pug/utils/log"
 )
 
 type Module struct {
@@ -27,8 +26,7 @@ func (m *Module) Author() []string {
 
 func NewYtDl(args map[string]interface{}) interface{} {
 	proxy := args["proxy"]
-	if args["proxy"] == nil || args["proxy"].(string) == "" {
-		log.Fatalf("[Bash] No Command provided!\n")
+	if args["proxy"] == nil {
 		proxy = ""
 	}
 
