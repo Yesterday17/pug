@@ -20,17 +20,16 @@ package bilibili
 
 import (
 	"github.com/Yesterday17/pug/utils/net"
-	"os"
 	"strings"
 )
 
-func (m *Module) PreUpload(file *os.File) error {
-	stat, err := file.Stat()
+func (v *Video) PreUpload(m *Module) error {
+	stat, err := v.File.Stat()
 	if err != nil {
 		return err
 	}
 	json, err := net.GetJSON(net.BuildUrl("member.bilibili.com", true, "preupload", map[string]string{
-		"name":    file.Name(),
+		"name":    v.File.Name(),
 		"size":    bigInt(stat.Size()).String(),
 		"r":       m.Route.os,
 		"profile": m.Route.profile,
@@ -42,34 +41,34 @@ func (m *Module) PreUpload(file *os.File) error {
 		return err
 	}
 
-	m.UposUri = json.Get("upos_uri").String()          // Upos Uri
-	m.Auth = json.Get("auth").String()                 // Auth
-	m.BizID = bigInt(json.Get("biz_id").Int())         // Biz ID
-	m.ChunkSize = bigInt(json.Get("chunk_size").Int()) // Chunk Size
-	m.Threads = bigInt(json.Get("threads").Int())      // Threads
+	v.UposUri = json.Get("upos_uri").String()          // Upos Uri
+	v.Auth = json.Get("auth").String()                 // Auth
+	v.BizID = bigInt(json.Get("biz_id").Int())         // Biz ID
+	v.ChunkSize = bigInt(json.Get("chunk_size").Int()) // Chunk Size
+	v.Threads = bigInt(json.Get("threads").Int())      // Threads
 
 	// EndPoint
 	if json.Get("endpoints.#").Int() > 0 {
-		m.EndPoint = json.Get("endpoints.0").String()
+		v.EndPoint = json.Get("endpoints.0").String()
 	} else {
-		m.EndPoint = json.Get("endpoint").String()
+		v.EndPoint = json.Get("endpoint").String()
 	}
 	return nil
 }
 
-func (m *Module) UploadsPost() error {
-	url := strings.ReplaceAll(m.UposUri, "upos:\\/\\/", m.EndPoint)[2:] // 2: here to remove \/\/
+func (v *Video) UploadsPost() error {
+	url := strings.ReplaceAll(v.UposUri, "upos:\\/\\/", v.EndPoint)[2:] // 2: here to remove \/\/
 	json, err := net.PostJSON(net.BuildUrl(url, true, "", map[string]string{
 		"uploads": "true",
 		"output":  "json",
 	}), net.Headers{
-		"X-Upos-Auth": m.Auth,
+		"X-Upos-Auth": v.Auth,
 	}, nil)
 	if err != nil {
 		return err
 	}
 
-	m.UploadID = json.Get("upload_id").String()
-	m.Key = json.Get("key").String()
+	v.UploadID = json.Get("upload_id").String()
+	v.Key = json.Get("key").String()
 	return nil
 }

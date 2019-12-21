@@ -18,16 +18,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 package bilibili
 
-type chunk struct {
-	index bigInt
-	total bigInt
+import (
+	"github.com/Yesterday17/pug/utils/net"
+	"strings"
+)
 
-	size      bigInt
-	start     bigInt
-	end       bigInt
-	totalSize bigInt
-}
-
-func (v *Video) SplitChunks() {
-
+func (m *Module) Submit(videos []*Video) {
+	_, _ = net.PostJSON("", map[string]string{}, strings.NewReader(""))
 }

@@ -23,15 +23,14 @@ import (
 	"fmt"
 	"github.com/Yesterday17/pug/utils/log"
 	"github.com/Yesterday17/pug/utils/net"
-	"os"
 	"strings"
 )
 
-func (m *Module) SendChunk(c chunk) error {
-	url := strings.ReplaceAll(m.UposUri, "upos:\\/\\/", m.EndPoint[4:]) +
+func (v *Video) SendChunk(c chunk) error {
+	url := strings.ReplaceAll(v.UposUri, "upos:\\/\\/", v.EndPoint[2:]) +
 		"/?" +
 		"partNumber=" + (c.index + 1).String() +
-		"&uploadId=" + m.UploadID +
+		"&uploadId=" + v.UploadID +
 		"&chunk=" + c.index.String() +
 		"&chunks=" + c.total.String() +
 		"&size=" + c.size.String() +
@@ -40,7 +39,7 @@ func (m *Module) SendChunk(c chunk) error {
 		"&total=" + c.totalSize.String()
 
 	body, err := net.PutBody(url, net.Headers{
-		"X-Upos-Auth": m.Auth,
+		"X-Upos-Auth": v.Auth,
 	}, nil)
 	if err != nil {
 		return err
@@ -51,27 +50,27 @@ func (m *Module) SendChunk(c chunk) error {
 	}
 }
 
-func (m *Module) EmitUpload(file *os.File) {
-	for _, c := range m.Chunks {
-		err := m.SendChunk(c)
+func (v *Video) EmitUpload() {
+	for _, c := range v.Chunks {
+		err := v.SendChunk(c)
 		if err != nil {
 			log.Error(err.Error())
 		}
 	}
 }
 
-func (m *Module) AfterUpload(file *os.File) {
-	url := net.BuildUrl(strings.ReplaceAll(m.UposUri, "upos:\\/\\/", m.EndPoint[4:]), true, "", map[string]string{
+func (v *Video) AfterUpload(m *Module) {
+	url := net.BuildUrl(strings.ReplaceAll(v.UposUri, "upos:\\/\\/", v.EndPoint[2:]), true, "", map[string]string{
 		"output":   "json",
-		"name":     file.Name(),
+		"name":     v.File.Name(),
 		"profile":  m.Route.profile,
-		"uploadId": m.UploadID,
-		"biz_id":   m.BizID.String(),
+		"uploadId": v.UploadID,
+		"biz_id":   v.BizID.String(),
 	})
 
 	// Build Payload
 	payload := `{"parts": [`
-	for i, _ := range m.Chunks {
+	for i := range v.Chunks {
 		if i != 0 {
 			payload += ","
 		}
@@ -79,7 +78,7 @@ func (m *Module) AfterUpload(file *os.File) {
 	}
 	payload += "]}"
 
-	json, err := net.PostJSON(url, map[string]string{"X-Upos-Auth": m.Auth}, strings.NewReader(payload))
+	json, err := net.PostJSON(url, map[string]string{"X-Upos-Auth": v.Auth}, strings.NewReader(payload))
 	if err != nil {
 		//
 	}

@@ -18,29 +18,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 package bilibili
 
-import "strconv"
-
-type bigInt int64
-
-func (i bigInt) String() string {
-	return strconv.FormatInt(int64(i), 10)
-}
-
 type Module struct {
-	PipeChunkReverse bool
-	Route            route
-
-	UposUri   string
-	Auth      string
-	BizID     bigInt
-	ChunkSize bigInt
-	Threads   bigInt
-	EndPoint  string
-
-	UploadID string
-	Key      string
-
-	Chunks []chunk
+	PipeChunkNotReverse bool
+	Route               route
 }
 
 func (m *Module) Name() string {

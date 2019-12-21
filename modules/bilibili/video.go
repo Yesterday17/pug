@@ -18,16 +18,36 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 package bilibili
 
-type chunk struct {
-	index bigInt
-	total bigInt
+import (
+	"os"
+	"strconv"
+)
 
-	size      bigInt
-	start     bigInt
-	end       bigInt
-	totalSize bigInt
+type bigInt int64
+
+func (i bigInt) String() string {
+	return strconv.FormatInt(int64(i), 10)
 }
 
-func (v *Video) SplitChunks() {
+type Video struct {
+	File   *os.File
+	Chunks []chunk
 
+	UposUri   string
+	Auth      string
+	BizID     bigInt
+	ChunkSize bigInt
+	Threads   bigInt
+	EndPoint  string
+
+	UploadID string
+	Key      string
+}
+
+func NewVideo(file string) (*Video, error) {
+	f, err := os.Open(file)
+	if err != nil {
+		return nil, err
+	}
+	return &Video{File: f}, nil
 }
