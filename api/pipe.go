@@ -51,5 +51,5 @@ type Pipe interface {
 
 type EndPointPipe interface {
 	Pipe
-	PipeOut() error
+	PipeOut(prev Pipe, pl Pipeline) error
 }

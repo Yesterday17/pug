@@ -57,7 +57,7 @@ func (l *linearPipeline) Run(p Pipe) {
 	var prev = p
 	for l.line.Len() > 0 {
 		if prev.Status() == PipeError {
-			log.Fatalf("Pipeline has met an error in pipe %s, program terminated.\n", prev.(interface{}).(Module).Name())
+			log.Fatalf("Pipeline has met an error in pipe %s, program terminated.\n", prev.(Module).Name())
 			break
 		}
 
@@ -65,11 +65,15 @@ func (l *linearPipeline) Run(p Pipe) {
 		l.line.Remove(current)
 
 		p := (current.Value).(Pipe)
-		p.Do(prev, l)
-		prev = p
-
 		if p.Type() == EndpointPipe {
+			p := p.(EndPointPipe)
+			if err := p.PipeOut(prev, l); err != nil {
+				log.Fatalf("Module %s has met an error: %s\n", p.(Module).Name(), err.Error())
+			}
 			break
+		} else {
+			p.Do(prev, l)
+			prev = p
 		}
 	}
 	if prev.Status() == PipeError {
