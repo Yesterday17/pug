@@ -40,6 +40,7 @@ var (
 	}
 )
 
-func (b *bilibili) SelectRoute() {
-	//
+func (m *Module) SelectRoute() {
+	// TODO: Select route after ping
+	m.Route = upos
 }

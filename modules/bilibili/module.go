@@ -18,28 +18,40 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 package bilibili
 
-import (
-	"github.com/Yesterday17/pug/api"
-)
+import "strconv"
 
-type bilibili struct {
+type bigInt int64
+
+func (i bigInt) String() string {
+	return strconv.FormatInt(int64(i), 10)
+}
+
+type Module struct {
 	PipeChunkReverse bool
 	Route            route
+
+	UposUri   string
+	Auth      string
+	BizID     bigInt
+	ChunkSize bigInt
+	Threads   bigInt
+	EndPoint  string
+
+	UploadID string
+	Key      string
+
+	Chunks []chunk
 }
 
-var Bilibili api.Module = &bilibili{
-	PipeChunkReverse: false,
+func (m *Module) Name() string {
+	return "Module"
 }
 
-func (b *bilibili) Name() string {
-	return "bilibili"
+func (m *Module) Description() string {
+	return "bilibili module."
 }
 
-func (b *bilibili) Description() string {
-	return "Bilibili module."
-}
-
-func (b *bilibili) Author() []string {
+func (m *Module) Author() []string {
 	return []string{
 		"Yesterday17",
 	}

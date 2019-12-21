@@ -20,49 +20,56 @@ package bilibili
 
 import (
 	"github.com/Yesterday17/pug/utils/net"
-	"github.com/tidwall/gjson"
 	"os"
-	"strconv"
 	"strings"
 )
 
-func (b *bilibili) PreUpload(file os.File) (gjson.Result, error) {
+func (m *Module) PreUpload(file *os.File) error {
 	stat, err := file.Stat()
 	if err != nil {
-		return gjson.Result{}, err
+		return err
 	}
 	json, err := net.GetJSON(net.BuildUrl("member.bilibili.com", true, "preupload", map[string]string{
 		"name":    file.Name(),
-		"size":    strconv.FormatInt(stat.Size(), 10),
-		"r":       b.Route.os,
-		"profile": b.Route.profile,
+		"size":    bigInt(stat.Size()).String(),
+		"r":       m.Route.os,
+		"profile": m.Route.profile,
 		"ssl":     "0",
 		"version": "2.7.0",
 		"build":   "2070000",
-	})+b.Route.query, nil)
+	})+m.Route.query, nil)
 	if err != nil {
-		return gjson.Result{}, err
+		return err
 	}
-	return json, nil
+
+	m.UposUri = json.Get("upos_uri").String()          // Upos Uri
+	m.Auth = json.Get("auth").String()                 // Auth
+	m.BizID = bigInt(json.Get("biz_id").Int())         // Biz ID
+	m.ChunkSize = bigInt(json.Get("chunk_size").Int()) // Chunk Size
+	m.Threads = bigInt(json.Get("threads").Int())      // Threads
+
+	// EndPoint
+	if json.Get("endpoints.#").Int() > 0 {
+		m.EndPoint = json.Get("endpoints.0").String()
+	} else {
+		m.EndPoint = json.Get("endpoint").String()
+	}
+	return nil
 }
 
-func (b *bilibili) UploadsPost(beforeUpload gjson.Result) (gjson.Result, error) {
-	var endPoint string
-	if beforeUpload.Get("endpoints.#").Int() > 0 {
-		endPoint = beforeUpload.Get("endpoints.0").String()
-	} else {
-		endPoint = beforeUpload.Get("endpoint").String()
-	}
-
-	url := strings.ReplaceAll(beforeUpload.Get("upos_uri").String(), "upos:\\/\\/", endPoint)[4:] // 2: here to remove \/\/
-	uploadsPost, err := net.PostJSON(net.BuildUrl(url, true, "", map[string]string{
+func (m *Module) UploadsPost() error {
+	url := strings.ReplaceAll(m.UposUri, "upos:\\/\\/", m.EndPoint)[2:] // 2: here to remove \/\/
+	json, err := net.PostJSON(net.BuildUrl(url, true, "", map[string]string{
 		"uploads": "true",
 		"output":  "json",
 	}), net.Headers{
-		"X-Upos-Auth": beforeUpload.Get("auth").String(),
+		"X-Upos-Auth": m.Auth,
 	}, nil)
 	if err != nil {
-		return gjson.Result{}, err
+		return err
 	}
-	return uploadsPost, nil
+
+	m.UploadID = json.Get("upload_id").String()
+	m.Key = json.Get("key").String()
+	return nil
 }
