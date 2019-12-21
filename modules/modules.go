@@ -21,6 +21,7 @@ package modules
 import (
 	"github.com/Yesterday17/pug/modules/bash"
 	"github.com/Yesterday17/pug/modules/metaOverride"
+	"github.com/Yesterday17/pug/modules/pugd"
 	"github.com/Yesterday17/pug/modules/ytdl"
 )
 
@@ -30,4 +31,5 @@ var Modules = map[string]NewFunc{
 	"bash": bash.NewBash,
 	"ytdl": ytdl.NewYtDl,
 	"meta": metaOverride.NewMetaOverride,
+	"pugd": pugd.NewPUGd,
 }
