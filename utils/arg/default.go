@@ -16,18 +16,16 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package modules
+package arg
 
-import (
-	"github.com/Yesterday17/pug/modules/bash"
-	"github.com/Yesterday17/pug/modules/metaOverride"
-	"github.com/Yesterday17/pug/modules/ytdl"
-)
+func GetDefault(args map[string]interface{}, key string, d interface{}) interface{} {
+	ret := args[key]
+	if ret == nil {
+		ret = d
+	}
+	return ret
+}
 
-type NewFunc func(args map[string]interface{}) interface{}
-
-var Modules = map[string]NewFunc{
-	"bash": bash.NewBash,
-	"ytdl": ytdl.NewYtDl,
-	"meta": metaOverride.NewMetaOverride,
+func GetDefaultString(args map[string]interface{}, key string, d string) string {
+	return GetDefault(args, key, d).(string)
 }

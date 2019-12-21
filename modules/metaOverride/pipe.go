@@ -16,18 +16,42 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package modules
+package metaOverride
 
-import (
-	"github.com/Yesterday17/pug/modules/bash"
-	"github.com/Yesterday17/pug/modules/metaOverride"
-	"github.com/Yesterday17/pug/modules/ytdl"
-)
+import "github.com/Yesterday17/pug/api"
 
-type NewFunc func(args map[string]interface{}) interface{}
+func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {
+	m.Metadata = prev.Meta()
 
-var Modules = map[string]NewFunc{
-	"bash": bash.NewBash,
-	"ytdl": ytdl.NewYtDl,
-	"meta": metaOverride.NewMetaOverride,
+	if m.title != "" {
+		m.Metadata.Title = m.title
+	}
+
+	if m.author != "" {
+		m.Metadata.Author = m.author
+	}
+
+	if m.description != "" {
+		m.Metadata.Description = m.description
+	}
+
+	if m.cover != "" {
+		m.Metadata.Cover = m.cover
+	}
+
+	if m.link != "" {
+		m.Metadata.Link = m.link
+	}
+
+	if m.short != "" {
+		m.Metadata.Short = m.short
+	}
+
+	if m.from != "" {
+		m.Metadata.From = m.from
+	}
+
+	if m.releaseTime != "" {
+		m.Metadata.ReleaseTime = m.releaseTime
+	}
 }
