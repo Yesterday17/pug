@@ -28,8 +28,8 @@ import (
 
 type Dir string
 
-func NewDir() (Dir, error) {
-	dir, err := ioutil.TempDir("", "pug")
+func NewDir(folder string) (Dir, error) {
+	dir, err := ioutil.TempDir(folder, "pug")
 	if err != nil {
 		return "", err
 	}

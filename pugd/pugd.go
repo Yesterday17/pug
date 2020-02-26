@@ -18,8 +18,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 package pugd
 
-import "github.com/Yesterday17/pug/api"
+import (
+	"github.com/Yesterday17/pug/api"
+	"github.com/Yesterday17/pug/utils/log"
+)
 
 func Main(prev api.Pipe, args map[string]interface{}) {
-
+	log.Info("PUGD!")
 }

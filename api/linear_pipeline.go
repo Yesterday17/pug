@@ -36,7 +36,7 @@ type linearPipeline struct {
 }
 
 func NewLinearPipeline() (Pipeline, error) {
-	tmp, err := temp.NewDir()
+	tmp, err := temp.NewDir("") // FIXME: config
 	if err != nil {
 		return &linearPipeline{}, err
 	}
