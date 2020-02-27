@@ -23,6 +23,7 @@ import (
 
 	"github.com/Yesterday17/pug/api"
 	"github.com/Yesterday17/pug/modules"
+	"github.com/Yesterday17/pug/pugd"
 	"github.com/Yesterday17/pug/utils/arg"
 	"github.com/Yesterday17/pug/utils/log"
 )
@@ -43,13 +44,24 @@ func main() {
 	}
 	defer pl.TempDir().Clear()
 
+	if len(os.Args) < 2 {
+		// TODO: Show Usage
+		return
+	}
+
+	start := os.Args[1]
+	if start == "-d" || start == "daemon" || start == "--daemon" {
+		log.Info("Launching pugd...")
+		pugd.Main(map[string]interface{}{})
+		return
+	}
+
 	// no module specified
 	if len(os.Args) < 3 {
 		// TODO: Show Usage
 		return
 	}
 
-	start := os.Args[1]
 	ps := arg.ParseArgs(os.Args[2:])
 	if ps == nil {
 		// TODO: Show Usage
@@ -61,6 +73,7 @@ func main() {
 		// TODO: load from file
 		_ = file
 	} else {
+		// @Deprecated
 		for index := 0; index < len(ps)-1; index++ {
 			params := ps[index]
 			name := params["module"].(string)

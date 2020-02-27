@@ -24,5 +24,5 @@ import (
 )
 
 func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {
-	pugd.Main(prev, m.args)
+	pugd.Main(m.args)
 }

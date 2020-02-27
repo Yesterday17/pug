@@ -32,7 +32,7 @@ func (m *Module) Name() string {
 }
 
 func (m *Module) Description() string {
-	return "Background daemon for PUG."
+	return "Daemon for PUG."
 }
 
 func (m *Module) Author() []string {
