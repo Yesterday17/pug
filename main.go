@@ -51,19 +51,25 @@ func main() {
 	}
 
 	start := os.Args[1]
+	args := os.Args[2:]
+	// daemon
 	if start == "-d" || start == "daemon" || start == "--daemon" {
 		log.Info("Launching pugd...\n")
 		pugd.Main(map[string]interface{}{})
 		return
 	}
+	if start[0] == '-' {
+		start = ""
+		args = os.Args[1:]
+	}
 
 	// no module specified
-	if len(os.Args) < 3 {
+	if len(args) < 1 {
 		// TODO: Show Usage
 		return
 	}
 
-	ps := arg.ParseArgs(os.Args[2:])
+	ps := arg.ParseArgs(args)
 	if ps == nil {
 		// TODO: Show Usage
 		return
