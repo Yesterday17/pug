@@ -18,5 +18,35 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 package describe
 
-func ReadSetting() {
+import (
+	"io/ioutil"
+
+	"gopkg.in/yaml.v2"
+)
+
+func Load(file string) (Described, error) {
+	desc := described{root: make(map[string]interface{}), pl: []string{}}
+	data, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
+	err = yaml.Unmarshal(data, &desc.root)
+	if err != nil {
+		return nil, err
+	}
+
+	err = desc.Decode("pipeline", &desc.pl)
+	if err != nil {
+		return nil, err
+	}
+
+	return &desc, nil
+}
+
+func NewDescribe(params map[string]interface{}) Described {
+	var desc = described{pl: []string{}, root: params}
+	for k := range params {
+		desc.pl = append(desc.pl, k)
+	}
+	return &desc
 }

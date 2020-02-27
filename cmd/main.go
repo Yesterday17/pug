@@ -25,7 +25,7 @@ import (
 	"github.com/Yesterday17/pug/modules"
 	"github.com/Yesterday17/pug/pugd"
 	"github.com/Yesterday17/pug/utils/arg"
-	"github.com/Yesterday17/pug/utils/log"
+	"github.com/Yesterday17/pug/utils/describe"
 )
 
 func appendToPipeline(pl api.Pipeline, name string, params map[string]interface{}) error {
@@ -71,7 +71,19 @@ func main() {
 	file, ok := ps[len(ps)-1]["file"]
 	if ok {
 		// TODO: load from file
-		_ = file
+		desc, err := describe.Load(file.(string))
+		if err != nil {
+			log.Fatal(err.Error())
+			return
+		}
+		desc.Range(func(key string) {
+			err := appendToPipeline(pl, key, desc.Extract(key).Root())
+			if err != nil {
+				log.Fatal(err.Error())
+				return
+			}
+		})
+
 	} else {
 		// @Deprecated
 		for index := 0; index < len(ps)-1; index++ {
@@ -80,6 +92,7 @@ func main() {
 			err := appendToPipeline(pl, name, params)
 			if err != nil {
 				log.Fatal(err.Error())
+				return
 			}
 		}
 	}

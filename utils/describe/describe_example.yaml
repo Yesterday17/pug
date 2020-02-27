@@ -16,7 +16,7 @@ meta_override:
 upload_to_bilibili:
   module: bilibili
   username: username
-  passwors: password
+  password: password
 
 pipeline:
   - bash_time

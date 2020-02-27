@@ -1,0 +1,11 @@
+github.com/Yesterday17/pug v0.0.0-20200227111235-2347b55224bc h1:bBFYdDqXWwvo5Srq7XgIRxLPK3pVd7HVqLbAyO81t1g=
+github.com/Yesterday17/pug v0.0.0-20200227111235-2347b55224bc/go.mod h1:p+4kQY+vYl50jwnVIo5Yko0ZyKBHeCER3p5N7JA3cjo=
+github.com/Yesterday17/pug/utils/describe v0.0.0-20200227111235-2347b55224bc h1:yRmeRB1Z1H3hPjCVAY1Acr/1OBYfOd5dgVwtOpz3T5M=
+github.com/Yesterday17/pug/utils/describe v0.0.0-20200227111235-2347b55224bc/go.mod h1:+BsDyk0UGXtCOyyI9HBWg1tTfuyd9XPCucd/imG2/Ks=
+github.com/Yesterday17/pug/utils/log v0.0.0-20191213153836-e15b0976cf27 h1:O8xBZTK/vgc5aY5NYHhe3FIXWTv8cFbyGy1CO4PnvUo=
+github.com/Yesterday17/pug/utils/log v0.0.0-20191213153836-e15b0976cf27/go.mod h1:VN2LFXIdOXo+d7x6PmAhRlT/RNkYdEb+0c/Pf1qsTCw=
+github.com/tidwall/gjson v1.3.5/go.mod h1:P256ACg0Mn+j1RXIDXoss50DeIABTYK1PULOJHhxOls=
+github.com/tidwall/match v1.0.1/go.mod h1:LujAq0jyVjBy028G1WhWfIzbpQfMO8bBZ6Tyb0+pL9E=
+github.com/tidwall/pretty v1.0.0/go.mod h1:XNkn88O1ChpSDQmQeStsy+sBenx6DDtFZJxhVysOjyk=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+gopkg.in/yaml.v2 v2.2.8/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
