@@ -19,10 +19,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package net
 
 import (
-	"github.com/tidwall/gjson"
 	"io"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/tidwall/gjson"
 )
 
 func (c *Client) Request(method, url string, headers Headers, body io.Reader) (Response, error) {

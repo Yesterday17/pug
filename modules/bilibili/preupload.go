@@ -19,8 +19,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package bilibili
 
 import (
-	"github.com/Yesterday17/pug/utils/net"
 	"strings"
+
+	"github.com/Yesterday17/pug/utils/net"
 )
 
 func (v *Video) PreUpload(m *Module) error {

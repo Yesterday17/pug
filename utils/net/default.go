@@ -19,8 +19,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package net
 
 import (
-	"github.com/tidwall/gjson"
 	"io"
+
+	"github.com/tidwall/gjson"
 )
 
 var DefaultClient = NewClient()

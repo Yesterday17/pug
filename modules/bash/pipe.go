@@ -20,11 +20,12 @@ package bash
 
 import (
 	"bufio"
+	"os"
+	"os/exec"
+
 	"github.com/Yesterday17/pug/api"
 	"github.com/Yesterday17/pug/utils/conf"
 	"github.com/Yesterday17/pug/utils/log"
-	"os"
-	"os/exec"
 )
 
 func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {

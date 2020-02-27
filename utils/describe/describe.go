@@ -16,30 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package net
+package describe
 
-import u "net/url"
-
-func BuildUrl(domain string, ssl bool, path string, params map[string]string) string {
-	// Protocol
-	url := "http"
-	if ssl {
-		url += "s"
-	}
-	url += "://"
-	// Domain
-	url += domain + "/"
-	// Path
-	url += path
-	// Params
-	if len(params) > 0 {
-		url += "?"
-		for key, value := range params {
-			url += u.QueryEscape(key)
-			url += "="
-			url += u.QueryEscape(value)
-			url += "&"
-		}
-	}
-	return url
+func ReadSetting() {
 }

@@ -2,12 +2,13 @@ package ytdl
 
 import (
 	"bufio"
-	"github.com/Yesterday17/pug/api"
-	"github.com/Yesterday17/pug/utils/log"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"github.com/Yesterday17/pug/api"
+	"github.com/Yesterday17/pug/utils/log"
 )
 
 func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {

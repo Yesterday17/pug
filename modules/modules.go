@@ -19,17 +19,28 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package modules
 
 import (
+	"fmt"
+
+	"github.com/Yesterday17/pug/api"
 	"github.com/Yesterday17/pug/modules/bash"
 	"github.com/Yesterday17/pug/modules/metaOverride"
 	"github.com/Yesterday17/pug/modules/pugd"
 	"github.com/Yesterday17/pug/modules/ytdl"
 )
 
-type NewFunc func(args map[string]interface{}) interface{}
+type newFunc func(args map[string]interface{}) interface{}
 
-var Modules = map[string]NewFunc{
+var modules = map[string]newFunc{
 	"bash": bash.NewBash,
 	"ytdl": ytdl.NewYtDl,
 	"meta": metaOverride.NewMetaOverride,
 	"pugd": pugd.NewPUGd,
+}
+
+func NewModule(name string, params map[string]interface{}) (api.Pipe, error) {
+	m, ok := modules[name]
+	if !ok {
+		return nil, fmt.Errorf("No module named %s found!\n", name)
+	}
+	return m(params).(api.Pipe), nil
 }

@@ -19,10 +19,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package net
 
 import (
-	"github.com/tidwall/gjson"
 	"io"
 	"net/http"
 	"net/http/cookiejar"
+
+	"github.com/tidwall/gjson"
 )
 
 const DefaultUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) PUG/utils/net-latest Safari/537.36"

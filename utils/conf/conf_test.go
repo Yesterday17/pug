@@ -26,8 +26,9 @@ package conf
 
 import (
 	"fmt"
-	"github.com/Yesterday17/pug/api"
 	"testing"
+
+	"github.com/Yesterday17/pug/api"
 )
 
 func TestSerialize(t *testing.T) {

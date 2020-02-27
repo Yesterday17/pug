@@ -19,11 +19,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package main
 
 import (
+	"os"
+
 	"github.com/Yesterday17/pug/api"
 	"github.com/Yesterday17/pug/modules"
 	"github.com/Yesterday17/pug/utils/arg"
 	"github.com/Yesterday17/pug/utils/log"
-	"os"
 )
 
 func main() {
@@ -48,12 +49,12 @@ func main() {
 
 	for _, p := range ps {
 		name := p["module"].(string)
-		m, ok := modules.Modules[name]
-		if !ok {
-			log.Fatalf("No module named %s found!\n", name)
+		module, err := modules.NewModule(name, p)
+		if err != nil {
+			log.Fatal(err.Error())
 			return
 		}
-		pl.Append(m(p).(api.Pipe))
+		pl.Append(module)
 	}
 
 	pl.RunWith(start)

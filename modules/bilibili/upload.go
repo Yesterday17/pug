@@ -21,9 +21,10 @@ package bilibili
 import (
 	"errors"
 	"fmt"
+	"strings"
+
 	"github.com/Yesterday17/pug/utils/log"
 	"github.com/Yesterday17/pug/utils/net"
-	"strings"
 )
 
 func (v *Video) SendChunk(c chunk) error {

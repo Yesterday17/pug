@@ -1,0 +1,25 @@
+bash_time:
+  module: bash
+  cmd: date
+
+get_from_youtube:
+  module: ytdl
+  format: mkv
+  proxy: socks5://127.0.0.1:8080
+
+meta_override:
+  module: meta
+  title: 「$AUTHOR$」$TITLE$
+  release: $NOW$
+  cover: https://example.com/cover.png
+
+upload_to_bilibili:
+  module: bilibili
+  username: username
+  passwors: password
+
+pipeline:
+  - bash_time
+  - get_from_youtube
+  - meta_override
+  - upload_to_bilibili

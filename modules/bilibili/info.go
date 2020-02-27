@@ -27,9 +27,9 @@ type biliWrapper struct {
 
 type webArchivePre struct {
 	// Ignored some useless entries
-	//Activities interface{}    `json:"activities"`
-	//Fav        interface{}    `json:"fav"`
-	//MyInfo     interface{}    `json:"myinfo"`
+	// Activities interface{}    `json:"activities"`
+	// Fav        interface{}    `json:"fav"`
+	// MyInfo     interface{}    `json:"myinfo"`
 	TypeList  []typeListItem `json:"typelist"`
 	VideoJam  videoJam       `json:"videojam"`
 	Watermark watermark      `json:"watermark"`
