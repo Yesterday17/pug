@@ -26,6 +26,7 @@ import (
 	"github.com/Yesterday17/pug/pugd"
 	"github.com/Yesterday17/pug/utils/arg"
 	"github.com/Yesterday17/pug/utils/describe"
+	"github.com/Yesterday17/pug/utils/log"
 )
 
 func appendToPipeline(pl api.Pipeline, name string, params map[string]interface{}) error {
