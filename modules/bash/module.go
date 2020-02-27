@@ -20,13 +20,17 @@ package bash
 
 import (
 	"github.com/Yesterday17/pug/api"
+	"github.com/Yesterday17/pug/utils/describe"
 	"github.com/Yesterday17/pug/utils/log"
 )
 
 type Module struct {
 	api.BasePipe
+	ModuleData
+}
 
-	Command string
+type ModuleData struct {
+	Command string `mapstructure:"cmd"`
 }
 
 func (m *Module) Name() string {
@@ -44,15 +48,11 @@ func (m *Module) Author() []string {
 }
 
 func NewBash(args map[string]interface{}) interface{} {
-	cmd := args["cmd"]
-	if args["cmd"] == nil || args["cmd"].(string) == "" {
-		log.Fatalf("[Bash] No Command provided!\n")
-		cmd = ""
+	var module Module
+	err := describe.NewDescribe(args).Decode("", &module.ModuleData)
+	if err != nil {
+		log.Fatalf("[Bash] Failed to parse command!")
+		module.BasePipe.PStatus = api.PipeError
 	}
-	return &Module{
-		BasePipe: api.BasePipe{
-			PStatus: api.PipeError,
-		},
-		Command: cmd.(string),
-	}
+	return &module
 }

@@ -20,20 +20,24 @@ package metaOverride
 
 import (
 	"github.com/Yesterday17/pug/api"
-	"github.com/Yesterday17/pug/utils/arg"
+	"github.com/Yesterday17/pug/utils/describe"
+	"github.com/Yesterday17/pug/utils/log"
 )
 
 type Module struct {
 	api.BasePipe
+	ModuleData
+}
 
-	title       string
-	author      string
-	description string
-	cover       string
-	link        string
-	short       string
-	from        string
-	releaseTime string
+type ModuleData struct {
+	Title           string `mapstructure:"title"`
+	AuthorInfo      string `mapstructure:"author"`
+	DescriptionInfo string `mapstructure:"description"`
+	Cover           string `mapstructure:"cover"`
+	Link            string `mapstructure:"link"`
+	Short           string `mapstructure:"short"`
+	From            string `mapstructure:"from"`
+	ReleaseTime     string `mapstructure:"release_time"`
 }
 
 func (m *Module) Name() string {
@@ -51,17 +55,11 @@ func (m *Module) Author() []string {
 }
 
 func NewMetaOverride(args map[string]interface{}) interface{} {
-	return &Module{
-		BasePipe: api.BasePipe{
-			PStatus: api.PipeWaiting,
-		},
-		title:       arg.GetDefaultString(args, "title", ""),
-		author:      arg.GetDefaultString(args, "author", ""),
-		description: arg.GetDefaultString(args, "desc", ""),
-		cover:       arg.GetDefaultString(args, "cover", ""),
-		link:        arg.GetDefaultString(args, "link", ""),
-		short:       arg.GetDefaultString(args, "short", ""),
-		from:        arg.GetDefaultString(args, "from", ""),
-		releaseTime: arg.GetDefaultString(args, "release", ""),
+	var module Module
+	err := describe.NewDescribe(args).Decode("", &module.ModuleData)
+	if err != nil {
+		log.Fatalf("[Meta] Failed to parse arguments!")
+		module.BasePipe.PStatus = api.PipeError
 	}
+	return &module
 }

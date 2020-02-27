@@ -23,35 +23,35 @@ import "github.com/Yesterday17/pug/api"
 func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {
 	m.Metadata = prev.Meta()
 
-	if m.title != "" {
-		m.Metadata.Title = m.title
+	if m.Title != "" {
+		m.Metadata.Title = m.Title
 	}
 
-	if m.author != "" {
-		m.Metadata.Author = m.author
+	if m.AuthorInfo != "" {
+		m.Metadata.Author = m.AuthorInfo
 	}
 
-	if m.description != "" {
-		m.Metadata.Description = m.description
+	if m.DescriptionInfo != "" {
+		m.Metadata.Description = m.DescriptionInfo
 	}
 
-	if m.cover != "" {
-		m.Metadata.Cover = m.cover
+	if m.Cover != "" {
+		m.Metadata.Cover = m.Cover
 	}
 
-	if m.link != "" {
-		m.Metadata.Link = m.link
+	if m.Link != "" {
+		m.Metadata.Link = m.Link
 	}
 
-	if m.short != "" {
-		m.Metadata.Short = m.short
+	if m.Short != "" {
+		m.Metadata.Short = m.Short
 	}
 
-	if m.from != "" {
-		m.Metadata.From = m.from
+	if m.From != "" {
+		m.Metadata.From = m.From
 	}
 
-	if m.releaseTime != "" {
-		m.Metadata.ReleaseTime = m.releaseTime
+	if m.ReleaseTime != "" {
+		m.Metadata.ReleaseTime = m.ReleaseTime
 	}
 }
