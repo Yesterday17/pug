@@ -27,6 +27,7 @@ import (
 
 type Described interface {
 	Exists(key string) bool
+	Sub(key string) Described
 	Extract(key string) Described
 	ExtractStrict(key string) (Described, error)
 	Decode(key string, dst interface{}) error
@@ -38,6 +39,23 @@ type Described interface {
 type described struct {
 	root map[string]interface{}
 	pl   []string
+}
+
+func (d *described) Sub(key string) Described {
+	var desc described
+	ex := d.Extract(key)
+	switch ex.Root()[key].(type) {
+	case map[interface{}]interface{}:
+		m := ex.Root()[key].(map[interface{}]interface{})
+		for k, v := range m {
+			switch k.(type) {
+			case string:
+				desc.root[k.(string)] = v
+				desc.pl = append(desc.pl, k.(string))
+			}
+		}
+	}
+	return &desc
 }
 
 func (d *described) Extract(key string) Described {
@@ -61,7 +79,7 @@ func (d *described) ExtractStrict(key string) (Described, error) {
 
 	reflect.Copy(reflect.ValueOf(extracted.pl), reflect.ValueOf(d.pl))
 	extracted.root = map[string]interface{}{
-		"key": d.root[key],
+		key: d.root[key],
 	}
 	return &extracted, nil
 }

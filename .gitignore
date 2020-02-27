@@ -6,3 +6,6 @@ pug
 *.mkv
 *.m4a
 *.part
+
+# config file
+config.yaml

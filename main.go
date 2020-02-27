@@ -71,14 +71,19 @@ func main() {
 
 	file, ok := ps[len(ps)-1]["file"]
 	if ok {
-		// TODO: load from file
 		desc, err := describe.Load(file.(string))
 		if err != nil {
 			log.Fatal(err.Error())
 			return
 		}
 		desc.Range(func(key string) {
-			err := appendToPipeline(pl, key, desc.Extract(key).Root())
+			root := desc.Sub(key).Root()
+			name, ok := root["module"]
+			if !ok {
+				log.Fatal("module not found")
+				return
+			}
+			err := appendToPipeline(pl, name.(string), root)
 			if err != nil {
 				log.Fatal(err.Error())
 				return
