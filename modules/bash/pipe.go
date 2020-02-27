@@ -54,7 +54,7 @@ func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {
 	PUGOutputMedia := pl.TempDir().NewFile(".conf")
 	PUGOutputMeta := pl.TempDir().NewFile(".conf")
 
-	cmd := exec.Command("Module", "-c", m.Command)
+	cmd := exec.Command("bash", "-c", m.Command)
 
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
