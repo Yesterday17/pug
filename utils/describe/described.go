@@ -42,7 +42,10 @@ type described struct {
 }
 
 func (d *described) Sub(key string) Described {
-	var desc described
+	var desc = described{
+		root: map[string]interface{}{},
+		pl:   []string{},
+	}
 	ex := d.Extract(key)
 	switch ex.Root()[key].(type) {
 	case map[interface{}]interface{}:
