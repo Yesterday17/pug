@@ -28,12 +28,13 @@ import "testing"
 
 func TestParseArgs(t *testing.T) {
 	result := ParseArgs([]string{
+		"-c", "config.yaml",
 		"-p", "test", "-arg1", "-arg2", "aaa", "-arg3=gg",
 		"-p=with-space", "-cmd", "[", "echo", "1", "2", "]",
 		"-p=bash", "-cmd=2333",
 	})
 
-	if len(result) != 3 {
+	if len(result) != 3+1 {
 		t.Error("Wrong pipe number!")
 		return
 	}

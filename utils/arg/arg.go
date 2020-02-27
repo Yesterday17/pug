@@ -29,23 +29,28 @@ import "strings"
 // assume the first element of args is -p
 // or len(args) == 0
 func ParseArgs(args []string) []map[string]interface{} {
-	if args == nil || len(args) == 0 {
+	if len(args) == 0 {
 		return nil
 	}
 
 	ret := make([]map[string]interface{}, 0)
+	config := map[string]interface{}{
+		"module": "config",
+	}
 
 	last := map[string]interface{}{}
-	var key string
-	var val string
+	lastConfigModified := false
+	var key, value string
 	for index, arg := range args {
-		if key != "" {
-			if arg == "[" || val != "" {
-				val += arg + " "
-				if arg == "]" {
-					last[key] = val[2 : len(val)-3]
+		if key != "" { // Parse value
+			if (len(arg) > 0 && arg[0] == '[') || value != "" {
+				// built-in argument with space
+				// [arg with space]
+				value += arg + " "
+				if arg == "]" || arg[len(arg)-1] == ']' {
+					last[key] = value[2 : len(value)-3]
 					key = ""
-					val = ""
+					value = ""
 				}
 				continue
 			}
@@ -57,35 +62,55 @@ func ParseArgs(args []string) []map[string]interface{} {
 				if k == "p" {
 					k = "module"
 				}
-				last[k] = arg
+				if k == "c" {
+					config["file"] = arg
+					lastConfigModified = true
+				} else {
+					last[k] = arg
+				}
 				continue
 			} else {
-				if k == "p" {
+				if k == "p" || k == "c" {
+					// -p [REQUIRED name]
+					// -c [REQUIRED config]
 					return nil
 				}
 				last[k] = true
 			}
 		}
 
+		// Parse Key
 		if arg[0] != byte('-') {
+			// key[0] is not '-'
 			return nil
 		}
 
 		entry := strings.Split(arg, "=")
-		if entry[0] == "-p" && index != 0 {
-			ret = append(ret, last)
-			last = map[string]interface{}{}
+		if (entry[0] == "-p" || entry[0] == "-c") && index != 0 {
+			if !lastConfigModified {
+				ret = append(ret, last)
+				last = map[string]interface{}{}
+			}
+			lastConfigModified = false
 		}
 
 		key = entry[0][1:]
 		if len(entry) > 1 {
+			// key=value
 			if key == "p" {
 				key = "module"
 			}
-			last[key] = strings.Join(entry[1:], "=")
+			value := strings.Join(entry[1:], "=")
+
+			if key == "c" {
+				config["file"] = value
+				lastConfigModified = true
+			} else {
+				last[key] = value
+			}
 			key = ""
 		}
 	}
-	ret = append(ret, last)
+	ret = append(ret, last, config)
 	return ret
 }

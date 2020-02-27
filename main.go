@@ -27,6 +27,15 @@ import (
 	"github.com/Yesterday17/pug/utils/log"
 )
 
+func appendToPipeline(pl api.Pipeline, name string, params map[string]interface{}) error {
+	module, err := modules.NewModule(name, params)
+	if err != nil {
+		return err
+	}
+	pl.Append(module)
+	return nil
+}
+
 func main() {
 	pl, err := api.NewLinearPipeline()
 	if err != nil {
@@ -47,14 +56,19 @@ func main() {
 		return
 	}
 
-	for _, p := range ps {
-		name := p["module"].(string)
-		module, err := modules.NewModule(name, p)
-		if err != nil {
-			log.Fatal(err.Error())
-			return
+	file, ok := ps[len(ps)-1]["file"]
+	if ok {
+		// TODO: load from file
+		_ = file
+	} else {
+		for index := 0; index < len(ps)-1; index++ {
+			params := ps[index]
+			name := params["module"].(string)
+			err := appendToPipeline(pl, name, params)
+			if err != nil {
+				log.Fatal(err.Error())
+			}
 		}
-		pl.Append(module)
 	}
 
 	pl.RunWith(start)
