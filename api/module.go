@@ -1,7 +1,7 @@
 /**
 MIT License
 
-Copyright (c) 2019 Yesterday17
+Copyright (c) 2019-2020 Yesterday17
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

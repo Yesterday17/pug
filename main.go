@@ -1,6 +1,6 @@
 /**
 PUG
-Copyright (C) 2019  Yesterday17
+Copyright (C) 2019-2020  Yesterday17
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ func main() {
 
 	start := os.Args[1]
 	if start == "-d" || start == "daemon" || start == "--daemon" {
-		log.Info("Launching pugd...")
+		log.Info("Launching pugd...\n")
 		pugd.Main(map[string]interface{}{})
 		return
 	}
