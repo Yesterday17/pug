@@ -24,34 +24,34 @@ func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {
 	m.Metadata = prev.Meta()
 
 	if m.Title != "" {
-		m.Metadata.Title = m.Title
+		m.Metadata.Title = m.ModuleData.Title
 	}
 
-	if m.AuthorInfo != "" {
-		m.Metadata.Author = m.AuthorInfo
+	if m.ModuleData.Author != "" {
+		m.Metadata.Author = m.ModuleData.Author
 	}
 
-	if m.DescriptionInfo != "" {
-		m.Metadata.Description = m.DescriptionInfo
+	if m.ModuleData.Description != "" {
+		m.Metadata.Description = m.ModuleData.Description
 	}
 
-	if m.Cover != "" {
-		m.Metadata.Cover = m.Cover
+	if m.ModuleData.Cover != "" {
+		m.Metadata.Cover = m.ModuleData.Cover
 	}
 
-	if m.Link != "" {
-		m.Metadata.Link = m.Link
+	if m.ModuleData.Link != "" {
+		m.Metadata.Link = m.ModuleData.Link
 	}
 
-	if m.Short != "" {
-		m.Metadata.Short = m.Short
+	if m.ModuleData.Short != "" {
+		m.Metadata.Short = m.ModuleData.Short
 	}
 
-	if m.From != "" {
-		m.Metadata.From = m.From
+	if m.ModuleData.From != "" {
+		m.Metadata.From = m.ModuleData.From
 	}
 
-	if m.ReleaseTime != "" {
-		m.Metadata.ReleaseTime = m.ReleaseTime
+	if m.ModuleData.ReleaseTime != "" {
+		m.Metadata.ReleaseTime = m.ModuleData.ReleaseTime
 	}
 }

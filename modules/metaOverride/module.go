@@ -30,14 +30,14 @@ type Module struct {
 }
 
 type ModuleData struct {
-	Title           string `mapstructure:"title"`
-	AuthorInfo      string `mapstructure:"author"`
-	DescriptionInfo string `mapstructure:"description"`
-	Cover           string `mapstructure:"cover"`
-	Link            string `mapstructure:"link"`
-	Short           string `mapstructure:"short"`
-	From            string `mapstructure:"from"`
-	ReleaseTime     string `mapstructure:"release_time"`
+	Title       string `mapstructure:"title"`
+	Author      string `mapstructure:"author"`
+	Description string `mapstructure:"description"`
+	Cover       string `mapstructure:"cover"`
+	Link        string `mapstructure:"link"`
+	Short       string `mapstructure:"short"`
+	From        string `mapstructure:"from"`
+	ReleaseTime string `mapstructure:"release_time"`
 }
 
 func (m *Module) Name() string {
@@ -58,7 +58,7 @@ func NewMetaOverride(args map[string]interface{}) interface{} {
 	var module Module
 	err := describe.NewDescribe(args).Decode("", &module.ModuleData)
 	if err != nil {
-		log.Fatalf("[Meta] Failed to parse arguments!")
+		log.Fatalf("[Meta] Failed to parse arguments!\n")
 		module.BasePipe.PStatus = api.PipeError
 	}
 	return &module

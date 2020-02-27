@@ -100,7 +100,7 @@ func (d *described) Decode(key string, dst interface{}) error {
 		}
 		to = d.root[key]
 	}
-	return mapstructure.Decode(to, dst)
+	return mapstructure.WeakDecode(to, dst)
 }
 
 func (d *described) Range(callback func(key string)) {
