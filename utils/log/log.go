@@ -26,6 +26,9 @@ import (
 type Logger struct {
 	w  io.Writer
 	ew io.Writer
+
+	Stdout io.Writer
+	Stderr io.Writer
 }
 
 func (l *Logger) Log(level Level, message string) {

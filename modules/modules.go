@@ -23,7 +23,7 @@ import (
 
 	"github.com/Yesterday17/pug/api"
 	"github.com/Yesterday17/pug/modules/bash"
-	"github.com/Yesterday17/pug/modules/metaOverride"
+	"github.com/Yesterday17/pug/modules/meta"
 	"github.com/Yesterday17/pug/modules/pugd"
 	"github.com/Yesterday17/pug/modules/ytdl"
 )
@@ -31,10 +31,11 @@ import (
 type newFunc func(args map[string]interface{}) interface{}
 
 var modules = map[string]newFunc{
-	"bash": bash.NewBash,
-	"ytdl": ytdl.NewYtDl,
-	"meta": metaOverride.NewMetaOverride,
-	"pugd": pugd.NewPUGd,
+	"bash":       bash.NewBash,
+	"ytdl":       ytdl.NewYtDl,
+	"youtube-dl": ytdl.NewYtDl,
+	"meta":       meta.NewMetaOverride,
+	"pugd":       pugd.NewPUGd,
 }
 
 func NewModule(name string, params map[string]interface{}) (api.Pipe, error) {

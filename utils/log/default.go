@@ -18,40 +18,47 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 package log
 
-import (
-	"os"
-)
+import "os"
 
-var l = Logger{w: os.Stdout, ew: os.Stderr}
+var DefaultLogger *Logger
+
+func init() {
+	DefaultLogger = &Logger{
+		w:      os.Stdout,
+		ew:     os.Stderr,
+		Stdout: &logWriter{output: Info},
+		Stderr: &logWriter{output: Error},
+	}
+}
 
 func Info(message string) {
-	l.Info(message)
+	DefaultLogger.Info(message)
 }
 
 func Infof(format string, args ...interface{}) {
-	l.Infof(format, args...)
+	DefaultLogger.Infof(format, args...)
 }
 
 func Warn(message string) {
-	l.Warn(message)
+	DefaultLogger.Warn(message)
 }
 
 func Warnf(format string, args ...interface{}) {
-	l.Warnf(format, args...)
+	DefaultLogger.Warnf(format, args...)
 }
 
 func Error(message string) {
-	l.Error(message)
+	DefaultLogger.Error(message)
 }
 
 func Errorf(format string, args ...interface{}) {
-	l.Errorf(format, args...)
+	DefaultLogger.Errorf(format, args...)
 }
 
 func Fatal(message string) {
-	l.Fatal(message)
+	DefaultLogger.Fatal(message)
 }
 
 func Fatalf(format string, args ...interface{}) {
-	l.Fatalf(format, args...)
+	DefaultLogger.Fatalf(format, args...)
 }

@@ -19,7 +19,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package bash
 
 import (
-	"bufio"
 	"os"
 	"os/exec"
 
@@ -57,31 +56,8 @@ func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {
 
 	cmd := exec.Command("bash", "-c", m.Command)
 
-	stdout, err := cmd.StdoutPipe()
-	if err != nil {
-		log.Errorf("%s\n", err.Error())
-		m.PStatus = api.PipeError
-		return
-	}
-	go func() {
-		scanner := bufio.NewScanner(stdout)
-		for scanner.Scan() {
-			log.Infof("%s\n", scanner.Text())
-		}
-	}()
-
-	stderr, err := cmd.StderrPipe()
-	if err != nil {
-		log.Error(err.Error())
-		m.PStatus = api.PipeError
-		return
-	}
-	go func() {
-		scanner := bufio.NewScanner(stderr)
-		for scanner.Scan() {
-			log.Errorf("%s\n", scanner.Text())
-		}
-	}()
+	cmd.Stdout = log.DefaultLogger.Stdout
+	cmd.Stderr = log.DefaultLogger.Stderr
 
 	cmd.Env = append(os.Environ(),
 		"PUG_VERSION="+api.VERSION,
