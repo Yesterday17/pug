@@ -54,6 +54,12 @@ func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {
 	PUGOutputMedia := pl.TempDir().NewFile(".conf")
 	PUGOutputMeta := pl.TempDir().NewFile(".conf")
 
+	if m.ModuleData.Preload {
+		m.Command = "export $(cat $PUG_PREV_MEDIA | xargs)\n" +
+			"export $(cat $PUG_PREV_META | xargs)\n" +
+			m.Command
+	}
+
 	cmd := exec.Command("bash", "-c", m.Command)
 
 	cmd.Stdout = log.DefaultLogger.Stdout

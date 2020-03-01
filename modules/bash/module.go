@@ -31,6 +31,7 @@ type Module struct {
 
 type ModuleData struct {
 	Command string `mapstructure:"cmd"`
+	Preload bool   `mapstructure:"preload"`
 }
 
 func (m *Module) Name() string {
