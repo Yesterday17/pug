@@ -19,12 +19,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package main
 
 import (
-	"os"
+	"flag"
 
 	"github.com/Yesterday17/pug/api"
 	"github.com/Yesterday17/pug/modules"
-	"github.com/Yesterday17/pug/pugd"
-	"github.com/Yesterday17/pug/utils/arg"
 	"github.com/Yesterday17/pug/utils/describe"
 	"github.com/Yesterday17/pug/utils/log"
 )
@@ -39,75 +37,32 @@ func appendToPipeline(pl api.Pipeline, name string, params map[string]interface{
 }
 
 func main() {
-	pl, err := api.NewLinearPipeline()
+	var pl api.Pipeline
+	var daemon bool
+	var config, url string
+
+	flag.StringVar(&config, "config", "", "")
+	flag.StringVar(&url, "url", "", "")
+	flag.BoolVar(&daemon, "daemon", false, "")
+
+	desc, err := describe.Load(config)
 	if err != nil {
-		panic(err)
-	}
-	defer pl.TempDir().Clear()
-
-	if len(os.Args) < 2 {
-		// TODO: Show Usage
+		log.Fatal(err.Error())
 		return
 	}
-
-	start := os.Args[1]
-	args := os.Args[2:]
-	// daemon
-	if start == "-d" || start == "daemon" || start == "--daemon" {
-		log.Info("Launching pugd...\n")
-		pugd.Main(map[string]interface{}{})
-		return
-	}
-	if start[0] == '-' {
-		start = ""
-		args = os.Args[1:]
-	}
-
-	// no module specified
-	if len(args) < 1 {
-		// TODO: Show Usage
-		return
-	}
-
-	ps := arg.ParseArgs(args)
-	if ps == nil {
-		// TODO: Show Usage
-		return
-	}
-
-	file, ok := ps[len(ps)-1]["file"]
-	if ok {
-		desc, err := describe.Load(file.(string))
+	desc.Range(func(key string) {
+		root := desc.Sub(key).Root()
+		name, ok := root["module"]
+		if !ok {
+			log.Fatal("module not found")
+			return
+		}
+		err := appendToPipeline(pl, name.(string), root)
 		if err != nil {
 			log.Fatal(err.Error())
 			return
 		}
-		desc.Range(func(key string) {
-			root := desc.Sub(key).Root()
-			name, ok := root["module"]
-			if !ok {
-				log.Fatal("module not found")
-				return
-			}
-			err := appendToPipeline(pl, name.(string), root)
-			if err != nil {
-				log.Fatal(err.Error())
-				return
-			}
-		})
+	})
 
-	} else {
-		// @Deprecated
-		for index := 0; index < len(ps)-1; index++ {
-			params := ps[index]
-			name := params["module"].(string)
-			err := appendToPipeline(pl, name, params)
-			if err != nil {
-				log.Fatal(err.Error())
-				return
-			}
-		}
-	}
-
-	pl.RunWith(start)
+	pl.RunWith(url)
 }
