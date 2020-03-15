@@ -24,10 +24,10 @@ var DefaultLogger *Logger
 
 func init() {
 	DefaultLogger = &Logger{
-		w:      os.Stdout,
-		ew:     os.Stderr,
-		Stdout: &logWriter{output: Info},
-		Stderr: &logWriter{output: Error},
+		logWriter:          os.Stdout,
+		errorWriter:        os.Stderr,
+		WrappedLogWriter:   &logWriter{output: Info},
+		WrappedErrorWriter: &logWriter{output: Error},
 	}
 }
 

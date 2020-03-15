@@ -62,8 +62,8 @@ func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {
 
 	cmd := exec.Command("bash", "-c", m.Command)
 
-	cmd.Stdout = log.DefaultLogger.Stdout
-	cmd.Stderr = log.DefaultLogger.Stderr
+	cmd.Stdout = log.DefaultLogger.WrappedLogWriter
+	cmd.Stderr = log.DefaultLogger.WrappedErrorWriter
 
 	cmd.Env = append(os.Environ(),
 		"PUG_VERSION="+api.VERSION,

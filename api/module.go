@@ -24,20 +24,9 @@ SOFTWARE.
 
 package api
 
-import "strings"
-
-// TODO: Finish Module Template
-const moduleTemplate = ""
-
 type Module interface {
 	Name() string
 	Description() string
 	Author() []string
-}
-
-// FIXME: Repalce with text template
-func ModuleInfo(m Module) string {
-	return m.Name() + "\n" +
-		"Author(s): " + strings.Join(m.Author(), ", ") +
-		"Description: " + m.Description()
+	Usage() string
 }

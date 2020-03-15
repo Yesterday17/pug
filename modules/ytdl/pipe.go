@@ -28,8 +28,8 @@ func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {
 	}
 
 	cmd := exec.Command("youtube-dl", args...)
-	cmd.Stdout = log.DefaultLogger.Stdout
-	cmd.Stderr = log.DefaultLogger.Stderr
+	cmd.Stdout = log.DefaultLogger.WrappedLogWriter
+	cmd.Stderr = log.DefaultLogger.WrappedErrorWriter
 
 	err := cmd.Start()
 	if err != nil {

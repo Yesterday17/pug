@@ -24,32 +24,17 @@ SOFTWARE.
 
 package api
 
-type PipeStatus int
-type PipeType int
+import "github.com/Yesterday17/pug/utils/log"
 
-const (
-	FilterPipe   PipeType = 0
-	SourcePipe   PipeType = 1
-	EndpointPipe PipeType = 2
-
-	PipeWaiting PipeStatus = 0
-	PipeWorking PipeStatus = 1
-	PipeSuccess PipeStatus = 2
-	PipeError   PipeStatus = 3
-)
-
-type Pipe interface {
-	Type() PipeType
-	Status() PipeStatus
-
+type MetaPipe interface {
 	Meta() Metadata
 	Media() Media
-
-	Auth() error
-	Do(prev Pipe, pl Pipeline)
 }
 
-type EndPointPipe interface {
-	Pipe
-	PipeOut(prev Pipe, pl Pipeline) error
+type Pipe interface {
+	MetaPipe
+
+	Module() Module
+	Prepare(l log.Logger) error
+	Do(prev MetaPipe) error
 }

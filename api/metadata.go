@@ -24,21 +24,10 @@ SOFTWARE.
 
 package api
 
-import "github.com/Yesterday17/pug/utils/conf"
-
-type Metadata struct {
-	Title       string `conf:"title"`
-	Author      string `conf:"author"`
-	Description string `conf:"desc"`
-	Cover       string `conf:"cover"`
-
-	Link  string `conf:"link"`
-	Short string `conf:"short"`
-
-	From        string
-	ReleaseTime string `conf:"release"`
-}
-
-func (m Metadata) Serialize() string {
-	return conf.Serialize(m)
+type Metadata interface {
+	Title() string
+	Author() string
+	Description() string
+	Url() string
+	ReleaseTime() string
 }

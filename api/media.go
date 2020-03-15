@@ -24,12 +24,6 @@ SOFTWARE.
 
 package api
 
-import "github.com/Yesterday17/pug/utils/conf"
-
-type Media struct {
-	Path string `conf:"path"`
-}
-
-func (m Media) Serialize() string {
-	return conf.Serialize(m)
+type Media interface {
+	Path() string
 }

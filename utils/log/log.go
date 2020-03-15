@@ -24,15 +24,15 @@ import (
 )
 
 type Logger struct {
-	w  io.Writer
-	ew io.Writer
+	logWriter   io.Writer
+	errorWriter io.Writer
 
-	Stdout io.Writer
-	Stderr io.Writer
+	WrappedLogWriter   io.Writer
+	WrappedErrorWriter io.Writer
 }
 
 func (l *Logger) Log(level Level, message string) {
-	_, _ = l.w.Write([]byte(string(getLevelColor(level)) + message + string(endColor)))
+	_, _ = l.logWriter.Write([]byte(string(getLevelColor(level)) + message + string(endColor)))
 }
 
 func (l *Logger) Logf(level Level, format string, args ...interface{}) {
@@ -56,7 +56,7 @@ func (l *Logger) Warnf(format string, args ...interface{}) {
 }
 
 func (l *Logger) Error(message string) {
-	_, _ = l.ew.Write([]byte(string(ErrorColor) + message + string(endColor)))
+	_, _ = l.errorWriter.Write([]byte(string(ErrorColor) + message + string(endColor)))
 }
 
 func (l *Logger) Errorf(format string, args ...interface{}) {
@@ -64,7 +64,7 @@ func (l *Logger) Errorf(format string, args ...interface{}) {
 }
 
 func (l *Logger) Fatal(message string) {
-	_, _ = l.ew.Write([]byte(string(FatalColor) + message + string(endColor)))
+	_, _ = l.errorWriter.Write([]byte(string(FatalColor) + message + string(endColor)))
 }
 
 func (l *Logger) Fatalf(format string, args ...interface{}) {
