@@ -29,4 +29,7 @@ type Module interface {
 	Description() string
 	Author() []string
 	Usage() string
+
+	Preprocessor() Preprocessor
+	Pipe() Pipe
 }

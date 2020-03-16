@@ -24,8 +24,14 @@ SOFTWARE.
 
 package api
 
+// Pipeline is a line of pipes linked together
+// It's a medium reuse unit, which often finishes a whole task
+// Keep it simple, stupid too
 type Pipeline interface {
+	// Pipeline is also a pipe, which means you can assemble pipeline with pipe
+	// However, we don't recommend doing so, as it may make the configuration more complex
+	Pipe
+
+	// Append can add Pipe to the end of a pipeline
 	Append(p ...Pipe)
-	Run(p Pipe)
-	RunWith(start string)
 }

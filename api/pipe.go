@@ -24,17 +24,17 @@ SOFTWARE.
 
 package api
 
-import "github.com/Yesterday17/pug/utils/log"
+import "github.com/Yesterday17/pug/utils/state"
 
-type MetaPipe interface {
-	Meta() Metadata
-	Media() Media
-}
-
+// Pipe is the minimal reuse unit in the project.
+// Keep it simple, stupid
 type Pipe interface {
-	MetaPipe
+	// Validate returns a string array, using the following rule
+	// If a string begins with '+', a value named string[1:] would be added to work state
+	// Elseif a string begins with '-', a value named string[1:] would be removed from work state
+	// Else, the value named string in work state would be modified
+	Validate() []string
 
-	Module() Module
-	Prepare(l log.Logger) error
-	Do(prev MetaPipe) error
+	// Execute a pipe
+	Execute(work state.State) error
 }
