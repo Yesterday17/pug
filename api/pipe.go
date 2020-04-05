@@ -24,8 +24,6 @@ SOFTWARE.
 
 package api
 
-import "github.com/Yesterday17/pug/utils/state"
-
 // Pipe is the minimal reuse unit in the project.
 // Keep it simple, stupid
 type Pipe interface {
@@ -36,5 +34,5 @@ type Pipe interface {
 	Validate() []string
 
 	// Execute a pipe
-	Execute(work state.State) error
+	Execute(work State) error
 }
