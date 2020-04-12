@@ -14,11 +14,9 @@
   </a>
 </p>
 
-> Pick Up ...What? (笑)
+> Pick Up Girls!
 
-PUG is a simple porter which helps you migrate videos between different places.
-
-~~pug is alias of pup, and pup is alias of puriporter, the original name of this repository~~
+PUG is a simple porter which helps you migrate videos between different platforms.
 
 ## Installation
 You can download precompiled version in [releases](releases), or just use `go get` go get this program:

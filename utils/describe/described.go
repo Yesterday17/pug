@@ -26,27 +26,42 @@ import (
 )
 
 type Described interface {
+	// Whether current key exists in this Described
 	Exists(key string) bool
+
+	// Sub tries to get a sub Described
 	Sub(key string) Described
-	Extract(key string) Described
-	ExtractStrict(key string) (Described, error)
+
+	// Extract generates a sub-description with strict rules
+	Extract(key string) (Described, error)
+	// ExtractWeak generates a sub description, or return an empty description after meeting an error
+	ExtractWeak(key string) Described
+
+	// Decode uses mapstructure to extract a description to a struct
 	Decode(key string, dst interface{}) error
-	Range(func(key string))
 
 	Root() map[string]interface{}
+	Env() map[string]interface{}
+	Workflow() []string
 }
 
 type described struct {
+	// root is the root node of current yaml file
 	root map[string]interface{}
-	pl   []string
+	// env describes pre-preprocessor states
+	env map[string]interface{}
+	// workflow is an array of pipeline strings
+	workflow []string
 }
 
 func (d *described) Sub(key string) Described {
 	var desc = described{
-		root: map[string]interface{}{},
-		pl:   []string{},
+		root:     map[string]interface{}{},
+		env:      d.env,
+		workflow: []string{},
 	}
-	ex := d.Extract(key)
+
+	ex := d.ExtractWeak(key)
 	switch ex.Root()[key].(type) {
 	case map[interface{}]interface{}:
 		m := ex.Root()[key].(map[interface{}]interface{})
@@ -54,33 +69,32 @@ func (d *described) Sub(key string) Described {
 			switch k.(type) {
 			case string:
 				desc.root[k.(string)] = v
-				desc.pl = append(desc.pl, k.(string))
+				desc.workflow = append(desc.workflow, k.(string))
 			}
 		}
 	}
 	return &desc
 }
 
-func (d *described) Extract(key string) Described {
-	desc, err := d.ExtractStrict(key)
+func (d *described) ExtractWeak(key string) Described {
+	desc, err := d.Extract(key)
 	if err != nil {
 		return &described{
-			root: map[string]interface{}{
-				key: map[string]interface{}{},
-			},
-			pl: d.pl, // FIXME: copy d.pl
+			root:     map[string]interface{}{},
+			env:      d.env,
+			workflow: d.workflow,
 		}
 	}
 	return desc
 }
 
-func (d *described) ExtractStrict(key string) (Described, error) {
+func (d *described) Extract(key string) (Described, error) {
 	var extracted described
 	if !d.Exists(key) {
 		return nil, errors.New("not exist: " + key)
 	}
 
-	reflect.Copy(reflect.ValueOf(extracted.pl), reflect.ValueOf(d.pl))
+	reflect.Copy(reflect.ValueOf(extracted.workflow), reflect.ValueOf(d.workflow))
 	extracted.root = map[string]interface{}{
 		key: d.root[key],
 	}
@@ -103,12 +117,14 @@ func (d *described) Decode(key string, dst interface{}) error {
 	return mapstructure.WeakDecode(to, dst)
 }
 
-func (d *described) Range(callback func(key string)) {
-	for _, p := range d.pl {
-		callback(p)
-	}
-}
-
 func (d *described) Root() map[string]interface{} {
 	return d.root
+}
+
+func (d *described) Env() map[string]interface{} {
+	return d.env
+}
+
+func (d *described) Workflow() []string {
+	return d.workflow
 }

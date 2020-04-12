@@ -1,25 +1,29 @@
-bash_time:
-  module: bash
+env:
+  proxy: socks5://127.0.0.1:1080
+
+time:
+  module: shell
+  pipe: bash
   cmd: date
 
-get_from_youtube:
+youtube-download:
   module: ytdl
   format: mkv
-  proxy: socks5://127.0.0.1:8080
 
-meta_override:
-  module: meta
-  title: 「$AUTHOR$」$TITLE$
-  release: $NOW$
-  cover: https://example.com/cover.png
-
-upload_to_bilibili:
+bilibili-login:
   module: bilibili
+  pipe: login
   username: username
   password: password
 
-pipeline:
-  - bash_time
-  - get_from_youtube
-  - meta_override
-  - upload_to_bilibili
+upload-to-bilibili:
+  pipeline:
+    - bilibili-login
+    - bilibili-upload:
+        module: bilibili
+        pipe: upload
+
+workflow:
+  - time
+  - youtube-download
+  - upload-to-bilibili

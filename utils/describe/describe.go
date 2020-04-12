@@ -25,17 +25,23 @@ import (
 )
 
 func Load(file string) (Described, error) {
-	desc := described{root: make(map[string]interface{}), pl: []string{}}
+	desc := described{root: make(map[string]interface{}), workflow: []string{}}
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err
 	}
+
 	err = yaml.Unmarshal(data, &desc.root)
 	if err != nil {
 		return nil, err
 	}
 
-	err = desc.Decode("pipeline", &desc.pl)
+	err = desc.Decode("workflow", &desc.workflow)
+	if err != nil {
+		return nil, err
+	}
+
+	err = desc.Decode("env", &desc.env)
 	if err != nil {
 		return nil, err
 	}
@@ -44,9 +50,9 @@ func Load(file string) (Described, error) {
 }
 
 func NewDescribe(params map[string]interface{}) Described {
-	var desc = described{pl: []string{}, root: params}
+	var desc = described{workflow: []string{}, root: params}
 	for k := range params {
-		desc.pl = append(desc.pl, k)
+		desc.workflow = append(desc.workflow, k)
 	}
 	return &desc
 }
