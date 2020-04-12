@@ -16,13 +16,19 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package pugd
+package shell
 
 import (
-	"github.com/Yesterday17/pug/api"
-	"github.com/Yesterday17/pug/pugd"
+	"github.com/Yesterday17/pug/modules/base"
 )
 
-func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {
-	pugd.Main(m.args)
-}
+var Module = base.Module(
+	"Shell",
+	"Execute system commands.",
+	[]string{"Yesterday17"},
+	"",
+	nil,
+	map[string]api.PipeConstructor{
+		"bash": newBashPipe,
+	},
+)

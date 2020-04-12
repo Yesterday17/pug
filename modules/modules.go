@@ -19,29 +19,29 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package modules
 
 import (
-	"fmt"
+	"errors"
 
-	"github.com/Yesterday17/pug/api"
-	"github.com/Yesterday17/pug/modules/bash"
-	"github.com/Yesterday17/pug/modules/meta"
-	"github.com/Yesterday17/pug/modules/pugd"
-	"github.com/Yesterday17/pug/modules/ytdl"
+	"github.com/Yesterday17/pug/modules/shell"
 )
 
-type newFunc func(args map[string]interface{}) interface{}
+var (
+	ModuleNameDuplicated = errors.New("module name duplicated")
+	modules              = map[string]api.Module{}
+)
 
-var modules = map[string]newFunc{
-	"bash":       bash.NewBash,
-	"ytdl":       ytdl.NewYtDl,
-	"youtube-dl": ytdl.NewYtDl,
-	"meta":       meta.NewMetaOverride,
-	"pugd":       pugd.NewPUGd,
+func AddModule(module api.Module) error {
+	_, ok := modules[module.Name()]
+	if ok {
+		return ModuleNameDuplicated
+	}
+	return nil
 }
 
-func NewModule(name string, params map[string]interface{}) (api.Pipe, error) {
-	m, ok := modules[name]
-	if !ok {
-		return nil, fmt.Errorf("No module named %s found!\n", name)
+func InitModules() error {
+	err := AddModule(shell.Module)
+	if err != nil {
+		return err
 	}
-	return m(params).(api.Pipe), nil
+
+	return nil
 }
