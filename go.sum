@@ -1,3 +1,5 @@
+github.com/Yesterday17/pug/api v0.0.0-20200412173216-b441d7d07a3e h1:CNLOUZcWiu1Zn8qC3vL3RnEZ66E2YzGwsBUqJb1SRTw=
+github.com/Yesterday17/pug/api v0.0.0-20200412173216-b441d7d07a3e/go.mod h1:vleRGeRIAK1JHgSOULV3aFabjTXY1BgUEiCo84t5/z4=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/mitchellh/mapstructure v1.1.2 h1:fmNYVwqnSfB9mZU6OS2O6GsXM+wcskZDuKQzvN1EDeE=
