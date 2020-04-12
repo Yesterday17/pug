@@ -25,11 +25,26 @@ SOFTWARE.
 package api
 
 type Module interface {
+	// Name should be the UNIQUE name of a module
+	// It is used to identify different modules
+	// It MUST NOT contain ':' or '/' character
 	Name() string
+
+	// Description is used to describe what the whole module does
 	Description() string
+
+	// Author shows the author(s) of a module
 	Author() []string
+
+	// Usage tells users the basic usage of the whole module
+	// And usage of all pipes in the module
 	Usage() string
 
+	// Preprocessor is used to preprocess input data and generate initial state
 	Preprocessor() Preprocessor
-	Pipe() Pipe
+
+	// Pipe is used to get PipeConstructors by Pipe Id
+	// Pipe Id only need to be unique in module, and should not contain strange characters
+	// If the constructor is not found, it returns nil PipeConstructor and false
+	Pipe(pid string) (PipeConstructor, bool)
 }

@@ -25,5 +25,11 @@ SOFTWARE.
 package api
 
 const (
-	VERSION = "1.0.0"
+	// VERSION of current PUG api
+	//
+	// Main contributors(alphabetical order):
+	// - KAASsS (API Design)
+	// - Seraph Jack (API Design)
+	// - Yesterday17 (API Design & Develop)
+	VERSION = "1.0.1"
 )

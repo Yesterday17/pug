@@ -24,15 +24,29 @@ SOFTWARE.
 
 package api
 
+// PipeConstructor is a function to build up a new Pipe
+// It returns a Pipe if arguments given are sufficient
+// Or it should returns nil Pipe and an error
+type PipeConstructor func(map[string]interface{}) (Pipe, error)
+
 // Pipe is the minimal reuse unit in the project.
 // Keep it simple, stupid
 type Pipe interface {
-	// Validate returns a string array, using the following rule
-	// If a string begins with '+', a value named string[1:] would be added to work state
-	// Elseif a string begins with '-', a value named string[1:] would be removed from work state
+	// Validate returns a map with string key and interface{} value
+	// If the string begins with '+', a value Named string[1:] would be ADDED to work state
+	// If a string begins with '-', a value Named string[1:] would be REMOVED from work state
 	// Else, the value named string in work state would be modified
-	Validate() []string
+	//
+	// If a string begins with '+', then it **should** NOT exist in the previous state
+	// THE 'SHOULD' MIGHT BE CHANGED TO MUST IN FURTHER VERSION
+	//
+	// If a string begins with '-' or neither those two, it MUST exist in the previous state
+	//
+	// If the function returns nil, it means type validation SHOULD be skipped
+	Validate() map[string]interface{}
 
 	// Execute a pipe
+	// Only pipes pass the validation can be executed
+	// After execution, the State would be changed as Validate describes
 	Execute(work State) error
 }

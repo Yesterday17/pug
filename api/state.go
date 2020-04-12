@@ -1,5 +1,6 @@
 package api
 
+// State is interface of a simple State Manager
 type State interface {
 	Has(key string) bool
 
