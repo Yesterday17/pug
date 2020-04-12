@@ -24,10 +24,19 @@ SOFTWARE.
 
 package api
 
+type PipeConstructorError int
+
+const (
+	PipeNoError PipeConstructorError = iota
+	PipeArgumentMissing
+	PipeArgumentTypeMismatch
+	PipeArgumentInvalid
+)
+
 // PipeConstructor is a function to build up a new Pipe
 // It returns a Pipe if arguments given are sufficient
 // Or it should returns nil Pipe and an error
-type PipeConstructor func(map[string]interface{}) (Pipe, error)
+type PipeConstructor func(map[string]interface{}) (Pipe, PipeConstructorError)
 
 // Pipe is the minimal reuse unit in the project.
 // Keep it simple, stupid
