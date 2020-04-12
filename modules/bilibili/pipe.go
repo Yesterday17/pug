@@ -18,39 +18,30 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 package bilibili
 
-import (
-	"github.com/Yesterday17/pug/api"
-	"github.com/Yesterday17/pug/utils/log"
-)
-
-func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {
-	log.Warn("WARN Non-EndPointPipe utility of bilibili module has not been implemented!")
-}
-
-func (m *Module) PipeOut(prev api.Pipe, pl api.Pipeline) {
-	m.SelectRoute()
-
-	v, err := NewVideo(prev.Media().Path)
-	if err != nil {
-		// TODO
-		return
-	}
-
-	err = v.PreUpload(m)
-	if err != nil {
-		// TODO
-		return
-	}
-
-	err = v.UploadsPost()
-	if err != nil {
-		// TODO
-		return
-	}
-
-	v.SplitChunks()
-	v.EmitUpload()
-	v.AfterUpload(m)
-
-	m.Submit([]*Video{v})
-}
+// func (m *Module) PipeOut(prev api.Pipe) {
+// 	m.SelectRoute()
+//
+// 	v, err := NewVideo(prev.Media().Path)
+// 	if err != nil {
+// 		// TODO
+// 		return
+// 	}
+//
+// 	err = v.PreUpload(m)
+// 	if err != nil {
+// 		// TODO
+// 		return
+// 	}
+//
+// 	err = v.UploadsPost()
+// 	if err != nil {
+// 		// TODO
+// 		return
+// 	}
+//
+// 	v.SplitChunks()
+// 	v.EmitUpload()
+// 	v.AfterUpload(m)
+//
+// 	m.Submit([]*Video{v})
+// }

@@ -21,7 +21,9 @@ package modules
 import (
 	"errors"
 
+	"github.com/Yesterday17/pug/api"
 	"github.com/Yesterday17/pug/modules/shell"
+	"github.com/Yesterday17/pug/modules/ytdl"
 )
 
 var (
@@ -29,19 +31,15 @@ var (
 	modules              = map[string]api.Module{}
 )
 
+func init() {
+	_ = AddModule(shell.Module)
+	_ = AddModule(ytdl.Module)
+}
+
 func AddModule(module api.Module) error {
 	_, ok := modules[module.Name()]
 	if ok {
 		return ModuleNameDuplicated
 	}
-	return nil
-}
-
-func InitModules() error {
-	err := AddModule(shell.Module)
-	if err != nil {
-		return err
-	}
-
 	return nil
 }

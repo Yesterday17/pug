@@ -18,21 +18,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 package bilibili
 
+import "github.com/Yesterday17/pug/modules/base"
+
+var module = base.Module(
+	"bilibili",
+	"bilibili related module",
+	[]string{"Yesterday17"},
+	"",
+	nil,
+	nil,
+)
+
 type Module struct {
 	PipeChunkNotReverse bool
 	Route               route
-}
-
-func (m *Module) Name() string {
-	return "Module"
-}
-
-func (m *Module) Description() string {
-	return "bilibili module."
-}
-
-func (m *Module) Author() []string {
-	return []string{
-		"Yesterday17",
-	}
 }

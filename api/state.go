@@ -10,5 +10,5 @@ type State interface {
 	GetString(key string) (string, error)
 	GetFloat(key string) (float32, error)
 
-	Set(key string, value interface{}) error
+	Set(key string, value interface{})
 }

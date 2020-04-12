@@ -21,12 +21,20 @@ package base
 import (
 	"errors"
 	"sync"
+
+	"github.com/Yesterday17/pug/api"
 )
 
 var NotFoundError = errors.New("no content found")
 
+func NewState() api.State {
+	return &state{
+		state: &sync.Map{},
+	}
+}
+
 type state struct {
-	state sync.Map
+	state *sync.Map
 }
 
 func (s *state) Has(key string) bool {
@@ -62,6 +70,6 @@ func (s *state) GetFloat(key string) (float32, error) {
 	return val.(float32), err
 }
 
-func (s *state) Set(key string, value interface{}) error {
-	return s.Set(key, value)
+func (s *state) Set(key string, value interface{}) {
+	s.state.Store(key, value)
 }

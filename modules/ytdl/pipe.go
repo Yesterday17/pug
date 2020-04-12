@@ -4,55 +4,63 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
 
 	"github.com/Yesterday17/pug/api"
 	"github.com/Yesterday17/pug/utils/log"
 )
 
-func (m *Module) Do(prev api.Pipe, pl api.Pipeline) {
-	m.PStatus = api.PipeWorking
-	m.Metadata = prev.Meta()
-	m.MediaData = prev.Media()
+type ytdlPipe struct {
+}
+
+func (y *ytdlPipe) Validate() map[string]interface{} {
+	return map[string]interface{}{
+		"url":   "",
+		"+file": "",
+	}
+}
+
+func (y *ytdlPipe) Execute(work api.State) (err error) {
+	var proxy, url string
+
+	if work.Has("proxy") {
+		proxy, err = work.GetString(proxy)
+		if err != nil {
+			return
+		}
+	}
+
+	url, _ = work.GetString("url")
 
 	args := []string{
-		prev.Meta().Link,
+		url,
 		"-o", "%(id)s.%(ext)s",
 		"-f", "bestvideo+bestaudio",
 		"--merge-output-format", "mkv",
 		"--newline",
 	}
 
-	if m.Proxy != "" {
-		args = append(args, "--proxy", m.Proxy)
+	if proxy != "" {
+		args = append(args, "--proxy", proxy)
 	}
 
 	cmd := exec.Command("youtube-dl", args...)
 	cmd.Stdout = log.DefaultLogger.WrappedLogWriter
 	cmd.Stderr = log.DefaultLogger.WrappedErrorWriter
 
-	err := cmd.Start()
+	err = cmd.Start()
 	if err != nil {
-		log.Errorf("%s\n", err.Error())
-		m.PStatus = api.PipeError
 		return
 	}
 
 	err = cmd.Wait()
 	if err != nil {
-		log.Errorf("%s\n", err.Error())
-		m.PStatus = api.PipeError
 		return
-	}
-
-	// Metadata
-	if strings.Contains(m.Metadata.Link, "youtube.com/watch?v=") {
-		// Youtube
-		m.Metadata.Short = strings.ReplaceAll(m.Metadata.Link, "https://www.youtube.com/watch?v=", "")
 	}
 
 	// Media
 	path, _ := os.Getwd()
-	m.MediaData.Path = filepath.Join(path, m.Metadata.Short+".mkv")
-	log.Infof("%s\n", m.MediaData.Path)
+	file := filepath.Join(path, "result.mkv")
+	work.Set("file", file)
+
+	return nil
 }
