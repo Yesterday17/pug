@@ -24,12 +24,24 @@ SOFTWARE.
 
 package api
 
-const (
-	// VERSION of current PUG api
-	//
-	// Main contributors(alphabetical order):
-	// - KAASsS (API Design)
-	// - Seraph Jack (API Design)
-	// - Yesterday17 (API Design & Develop)
-	VERSION = "1.0.3"
-)
+type ModuleManager interface {
+	// Exist validates whether a module named mid exists
+	Exist(mid string) bool
+
+	// ExistPipe validates whether a module named mid contains pipe named pid
+	// It both checks mid and pid
+	ExistPipe(mid, pid string) bool
+
+	// Add a module to the manager
+	// Then the module can be queried by the manager
+	// If the name of this pipe is used, it will return an error
+	Add(m Module) error
+
+	// Module gets module named mid
+	// If the module does not exist, it returns nil
+	Module(mid string) Module
+
+	// Pipe gets pipe named pid in module named mid
+	// If the module or pipe does not exist, it returns nil
+	Pipe(mid, pid string) Pipe
+}
