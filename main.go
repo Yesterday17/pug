@@ -22,6 +22,7 @@ import (
 	"flag"
 
 	"github.com/Yesterday17/pug/api"
+	"github.com/Yesterday17/pug/modules"
 	"github.com/Yesterday17/pug/utils/describe"
 	"github.com/Yesterday17/pug/utils/log"
 )
@@ -39,6 +40,7 @@ func main() {
 		return
 	}
 
+	_ = modules.Manager
 	for _, key := range desc.Workflow() {
 		root := desc.Sub(key).Root()
 		m, ok := root["module"]
