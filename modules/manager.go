@@ -43,7 +43,8 @@ func NewManager() api.ModuleManager {
 }
 
 type moduleManager struct {
-	modules map[string]api.Module
+	modules       map[string]api.Module
+	preprocessors []api.Preprocessor
 }
 
 func (m *moduleManager) Exist(mid string) bool {
@@ -66,6 +67,11 @@ func (m *moduleManager) Add(module api.Module) error {
 		return ModuleNameDuplicated
 	}
 	m.modules[module.Name()] = module
+
+	p := module.Preprocessor()
+	if p != nil {
+		m.preprocessors = append(m.preprocessors, p)
+	}
 	return nil
 }
 
@@ -88,4 +94,8 @@ func (m *moduleManager) Pipe(mid, pid string) api.PipeConstructor {
 		return nil
 	}
 	return pipe
+}
+
+func (m *moduleManager) Preprocessors() []api.Preprocessor {
+	return m.preprocessors
 }

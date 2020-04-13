@@ -36,4 +36,10 @@ type Worker interface {
 
 	// Cancel destroys the current work and empties the worker
 	Cancel() error
+
+	// Clone creates a new worker with the same workflow as the copied one
+	Clone() Worker
+
+	// Clean empties a worker to make it available for other works
+	Clean()
 }

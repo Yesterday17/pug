@@ -20,6 +20,8 @@ package base
 
 import (
 	"regexp"
+
+	"github.com/Yesterday17/pug/api"
 )
 
 type preprocessor struct {
@@ -32,7 +34,7 @@ type preprocessor struct {
  * base.Preprocessor is a regular expression based preprocessor
  * It uses a regex string and a interface{} channel as input
  *
- * The interface{} chan will receive a input and needs to generate an output
+ * The interface{} chan will receive env and a input, and need to generate an output
  * The type of output **must** be either api.State or error
  *
  * The function will not throw an error unless the regexp is invalid
@@ -53,7 +55,8 @@ func (p *preprocessor) Match(input string) bool {
 	return p.regex.MatchString(input)
 }
 
-func (p *preprocessor) Execute(input string) (api.State, error) {
+func (p *preprocessor) Execute(env map[string]interface{}, input string) (api.State, error) {
+	p.std <- env
 	p.std <- input
 	out := <-p.std
 	switch out.(type) {

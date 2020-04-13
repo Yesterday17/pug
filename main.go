@@ -21,14 +21,13 @@ package main
 import (
 	"flag"
 
-	"github.com/Yesterday17/pug/api"
 	"github.com/Yesterday17/pug/modules"
 	"github.com/Yesterday17/pug/utils/describe"
 	"github.com/Yesterday17/pug/utils/log"
+	"github.com/Yesterday17/pug/workflow"
 )
 
 func main() {
-	var worker api.Worker
 	var config, url string
 
 	flag.StringVar(&config, "config", "", "")
@@ -40,14 +39,10 @@ func main() {
 		return
 	}
 
-	_ = modules.Manager
-	for _, key := range desc.Workflow() {
-		root := desc.Sub(key).Root()
-		m, ok := root["module"]
-		if !ok {
-			log.Fatal("module not found")
-			return
-		}
+	worker, err := workflow.NewWorker(desc, modules.Manager)
+	if err != nil {
+		log.Fatal(err.Error())
+		return
 	}
 
 	err = worker.Start(url)

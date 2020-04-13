@@ -33,5 +33,6 @@ type Preprocessor interface {
 	Match(input string) bool
 
 	// Execute tries to build up the initial state of a work
-	Execute(input string) (State, error)
+	// It accepts env as environmental variables and a string as input
+	Execute(env map[string]interface{}, input string) (State, error)
 }

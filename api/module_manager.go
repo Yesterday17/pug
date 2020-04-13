@@ -44,4 +44,7 @@ type ModuleManager interface {
 	// Pipe gets constructor of pipe named pid in module named mid
 	// If the module or pipe does not exist, it returns nil
 	Pipe(mid, pid string) PipeConstructor
+
+	// Preprocessors among all the modules loaded
+	Preprocessors() []Preprocessor
 }
