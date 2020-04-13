@@ -42,14 +42,15 @@ type PipeConstructor func(map[string]interface{}) (Pipe, PipeConstructorError)
 // Keep it simple, stupid
 type Pipe interface {
 	// Validate returns a map with string key and interface{} value
-	// If the string begins with '+', a value Named string[1:] would be ADDED to work state
-	// If a string begins with '-', a value Named string[1:] would be REMOVED from work state
-	// Else, the value named string in work state would be modified
+	// If a string begins with '+', it would be ADDED to work state
+	// If a string begins with '-', it would be REMOVED from work state
+	// If a string begins with '!', it is needed by this pipe
+	// If a string begins with '?', it is optional to this pipe
 	//
 	// If a string begins with '+', then it **should** NOT exist in the previous state
 	// THE 'SHOULD' MIGHT BE CHANGED TO MUST IN FURTHER VERSION
 	//
-	// If a string begins with '-' or neither those two, it MUST exist in the previous state
+	// If a string begins with '-' or '!', it MUST exist in the previous state
 	//
 	// If the function returns nil, it means type validation SHOULD be skipped
 	Validate() map[string]interface{}
@@ -58,4 +59,7 @@ type Pipe interface {
 	// Only pipes pass the validation can be executed
 	// After execution, the State would be changed as Validate describes
 	Execute(work State) error
+
+	// Clone a pipe
+	Clone() Pipe
 }

@@ -35,4 +35,5 @@ type State interface {
 	GetFloat(key string) (float32, error)
 
 	Set(key string, value interface{})
+	Delete(key string)
 }

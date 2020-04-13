@@ -14,7 +14,7 @@ type ytdlPipe struct {
 
 func (y *ytdlPipe) Validate() map[string]interface{} {
 	return map[string]interface{}{
-		"url":   "",
+		"!url":  "",
 		"+file": "",
 	}
 }
@@ -63,4 +63,8 @@ func (y *ytdlPipe) Execute(work api.State) (err error) {
 	work.Set("file", file)
 
 	return nil
+}
+
+func (y *ytdlPipe) Clone() api.Pipe {
+	return &ytdlPipe{}
 }

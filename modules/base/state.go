@@ -73,3 +73,7 @@ func (s *state) GetFloat(key string) (float32, error) {
 func (s *state) Set(key string, value interface{}) {
 	s.state.Store(key, value)
 }
+
+func (s *state) Delete(key string) {
+	s.state.Delete(key)
+}

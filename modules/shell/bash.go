@@ -70,3 +70,7 @@ func (b *bashPipe) Execute(work api.State) error {
 
 	return nil
 }
+
+func (b *bashPipe) Clone() api.Pipe {
+	return &bashPipe{command: b.command}
+}
