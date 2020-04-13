@@ -32,6 +32,7 @@ func main() {
 
 	flag.StringVar(&config, "config", "", "")
 	flag.StringVar(&url, "url", "", "")
+	flag.Parse()
 
 	desc, err := describe.Load(config)
 	if err != nil {

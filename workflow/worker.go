@@ -38,7 +38,10 @@ func NewWorker(desc describe.Described, manager api.ModuleManager) (api.Worker, 
 			return nil, errors.New("module or pipe not found")
 		}
 
-		pipe, _ := pc(root)
+		pipe, err := pc(root)
+		if err != api.PipeNoError {
+			return nil, errors.New("pipe construct error")
+		}
 		w.flow = append(w.flow, pipe)
 	}
 

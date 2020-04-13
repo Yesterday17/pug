@@ -28,7 +28,7 @@ import (
 )
 
 func newBashPipe(m map[string]interface{}) (api.Pipe, api.PipeConstructorError) {
-	cmd, err := types.String(m, "command")
+	cmd, err := types.String(m, "cmd")
 	if err != api.PipeNoError {
 		return nil, err
 	}

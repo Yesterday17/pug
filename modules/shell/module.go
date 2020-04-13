@@ -19,11 +19,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 package shell
 
 import (
+	"github.com/Yesterday17/pug/api"
 	"github.com/Yesterday17/pug/modules/base"
 )
 
 var Module = base.Module(
-	"Shell",
+	"shell",
 	"Execute system commands.",
 	[]string{"Yesterday17"},
 	"",

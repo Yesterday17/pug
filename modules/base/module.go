@@ -18,6 +18,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 package base
 
+import "github.com/Yesterday17/pug/api"
+
 type module struct {
 	name        string
 	description string
