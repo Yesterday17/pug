@@ -23,11 +23,77 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/Yesterday17/pug/api"
 	"github.com/Yesterday17/pug/utils/log"
 	"github.com/Yesterday17/pug/utils/net"
 )
 
-func (v *Video) SendChunk(c chunk) error {
+type uploadPipe struct {
+	route route
+}
+
+func newUploadPipe(m map[string]interface{}) (api.Pipe, api.PipeConstructorError) {
+	return nil, 0
+}
+
+func (u *uploadPipe) Validate() map[string]interface{} {
+	return map[string]interface{}{}
+}
+
+func (u *uploadPipe) Execute(work api.State) error {
+	u.route = selectRoute()
+
+	video, _ := work.GetString("video")
+	v, err := NewVideo(video)
+	if err != nil {
+		return err
+	}
+
+	err = u.PreUpload(v)
+	if err != nil {
+		return err
+	}
+
+	err = u.UploadsPost(v)
+	if err != nil {
+		return err
+	}
+
+	v.SplitChunks()
+	u.EmitUpload(v)
+	u.AfterUpload(v)
+
+	u.Submit([]*Video{v})
+	return nil
+}
+
+type route struct {
+	os      string
+	query   string
+	url     string
+	profile string
+}
+
+var (
+	upos = route{
+		os:      "upos",
+		query:   "os=upos&upcdn=ws",
+		url:     "https://upos-sz-upcdnws.acgvideo.com/OK",
+		profile: "ugcupos/bup", // if interactive it should be ugcupos/iv
+	}
+	kodo = route{
+		os:      "kodo",
+		query:   "os=kodo&bucket=bvcupcdnkodobm",
+		url:     "https://up-na0.qbox.me/crossdomain.xml",
+		profile: "ugcupos/bupfetch",
+	}
+)
+
+func selectRoute() route {
+	// TODO: Select route after ping
+	return upos
+}
+func (u *uploadPipe) SendChunk(v *Video, c chunk) error {
 	url := strings.ReplaceAll(v.UposUri, "upos:\\/\\/", v.EndPoint[2:]) +
 		"/?" +
 		"partNumber=" + (c.index + 1).String() +
@@ -51,20 +117,20 @@ func (v *Video) SendChunk(c chunk) error {
 	}
 }
 
-func (v *Video) EmitUpload() {
+func (u *uploadPipe) EmitUpload(v *Video) {
 	for _, c := range v.Chunks {
-		err := v.SendChunk(c)
+		err := u.SendChunk(v, c)
 		if err != nil {
 			log.Error(err.Error())
 		}
 	}
 }
 
-func (v *Video) AfterUpload(m *Module) {
+func (u *uploadPipe) AfterUpload(v *Video) {
 	url := net.BuildUrl(strings.ReplaceAll(v.UposUri, "upos:\\/\\/", v.EndPoint[2:]), true, "", map[string]string{
 		"output":   "json",
 		"name":     v.File.Name(),
-		"profile":  m.Route.profile,
+		"profile":  u.route.profile,
 		"uploadId": v.UploadID,
 		"biz_id":   v.BizID.String(),
 	})

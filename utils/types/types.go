@@ -41,3 +41,25 @@ func String(m map[string]interface{}, key string) (string, api.PipeConstructorEr
 		return "", api.PipeArgumentTypeMismatch
 	}
 }
+
+func Int(m map[string]interface{}, key string) (int, api.PipeConstructorError) {
+	v, err := Assert(m, key)
+	if err != api.PipeNoError {
+		return 0, err
+	}
+
+	switch v.(type) {
+	case int:
+		return v.(int), api.PipeNoError
+	case int8:
+		return int(v.(int8)), api.PipeNoError
+	case int16:
+		return int(v.(int16)), api.PipeNoError
+	case int32:
+		return int(v.(int32)), api.PipeNoError
+	case int64:
+		return int(v.(int64)), api.PipeNoError
+	default:
+		return 0, api.PipeArgumentTypeMismatch
+	}
+}

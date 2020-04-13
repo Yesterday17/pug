@@ -24,7 +24,7 @@ import (
 	"github.com/Yesterday17/pug/utils/net"
 )
 
-func (v *Video) PreUpload(m *Module) error {
+func (u *uploadPipe) PreUpload(v *Video) error {
 	stat, err := v.File.Stat()
 	if err != nil {
 		return err
@@ -32,12 +32,12 @@ func (v *Video) PreUpload(m *Module) error {
 	json, err := net.GetJSON(net.BuildUrl("member.bilibili.com", true, "preupload", map[string]string{
 		"name":    v.File.Name(),
 		"size":    bigInt(stat.Size()).String(),
-		"r":       m.Route.os,
-		"profile": m.Route.profile,
+		"r":       u.route.os,
+		"profile": u.route.profile,
 		"ssl":     "0",
 		"version": "2.7.0",
 		"build":   "2070000",
-	})+m.Route.query, nil)
+	})+u.route.query, nil)
 	if err != nil {
 		return err
 	}
@@ -57,7 +57,7 @@ func (v *Video) PreUpload(m *Module) error {
 	return nil
 }
 
-func (v *Video) UploadsPost() error {
+func (u *uploadPipe) UploadsPost(v *Video) error {
 	url := strings.ReplaceAll(v.UposUri, "upos:\\/\\/", v.EndPoint)[2:] // 2: here to remove \/\/
 	json, err := net.PostJSON(net.BuildUrl(url, true, "", map[string]string{
 		"uploads": "true",

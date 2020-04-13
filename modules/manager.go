@@ -22,6 +22,7 @@ import (
 	"errors"
 
 	"github.com/Yesterday17/pug/api"
+	"github.com/Yesterday17/pug/modules/bilibili"
 	"github.com/Yesterday17/pug/modules/shell"
 	"github.com/Yesterday17/pug/modules/ytdl"
 )
@@ -38,6 +39,7 @@ func NewManager() api.ModuleManager {
 	// Basic modules
 	_ = m.Add(shell.Module)
 	_ = m.Add(ytdl.Module)
+	_ = m.Add(bilibili.Module)
 
 	return m
 }

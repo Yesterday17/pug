@@ -18,18 +18,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 package bilibili
 
-import "github.com/Yesterday17/pug/modules/base"
+import (
+	"github.com/Yesterday17/pug/api"
+	"github.com/Yesterday17/pug/modules/base"
+)
 
-var module = base.Module(
+var Module = base.Module(
 	"bilibili",
 	"bilibili related module",
 	[]string{"Yesterday17"},
-	"",
+	"bilibili toolkit",
 	nil,
-	nil,
+	map[string]api.PipeConstructor{
+		"login-qr": newLoginQrPipe,
+	},
 )
-
-type Module struct {
-	PipeChunkNotReverse bool
-	Route               route
-}

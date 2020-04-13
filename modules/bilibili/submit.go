@@ -24,6 +24,6 @@ import (
 	"github.com/Yesterday17/pug/utils/net"
 )
 
-func (m *Module) Submit(videos []*Video) {
+func (v *uploadPipe) Submit(videos []*Video) {
 	_, _ = net.PostJSON("", map[string]string{}, strings.NewReader(""))
 }
