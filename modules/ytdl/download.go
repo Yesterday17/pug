@@ -12,6 +12,10 @@ import (
 type ytdlPipe struct {
 }
 
+func newYtdlPipe(m map[string]interface{}) (api.Pipe, api.PipeConstructorError) {
+	return &ytdlPipe{}, api.PipeNoError
+}
+
 func (y *ytdlPipe) Validate() map[string]interface{} {
 	return map[string]interface{}{
 		"!url":  "",

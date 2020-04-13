@@ -77,3 +77,8 @@ func (s *state) Set(key string, value interface{}) {
 func (s *state) Delete(key string) {
 	s.state.Delete(key)
 }
+
+func (s *state) Clone() api.State {
+	st := *s.state
+	return &state{state: &st}
+}

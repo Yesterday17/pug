@@ -27,28 +27,25 @@ import (
 type preprocessor struct {
 	regex *regexp.Regexp
 
-	std chan interface{}
+	execute func(env map[string]interface{}, input string) (api.State, error)
 }
 
 /**
  * base.Preprocessor is a regular expression based preprocessor
- * It uses a regex string and a interface{} channel as input
- *
- * The interface{} chan will receive env and a input, and need to generate an output
- * The type of output **must** be either api.State or error
+ * It uses a regex string and an execute function as input
  *
  * The function will not throw an error unless the regexp is invalid
  */
-func Preprocessor(regex string, std chan interface{}) (api.Preprocessor, error) {
+func Preprocessor(regex string, exec func(map[string]interface{}, string) (api.State, error)) api.Preprocessor {
 	r, err := regexp.Compile(regex)
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
 	return &preprocessor{
-		regex: r,
-		std:   std,
-	}, nil
+		regex:   r,
+		execute: exec,
+	}
 }
 
 func (p *preprocessor) Match(input string) bool {
@@ -56,13 +53,5 @@ func (p *preprocessor) Match(input string) bool {
 }
 
 func (p *preprocessor) Execute(env map[string]interface{}, input string) (api.State, error) {
-	p.std <- env
-	p.std <- input
-	out := <-p.std
-	switch out.(type) {
-	case error:
-		return nil, out.(error)
-	default:
-		return out.(api.State), nil
-	}
+	return p.execute(env, input)
 }

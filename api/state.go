@@ -36,4 +36,6 @@ type State interface {
 
 	Set(key string, value interface{})
 	Delete(key string)
+
+	Clone() State
 }

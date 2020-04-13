@@ -5,7 +5,6 @@ import (
 	"reflect"
 
 	"github.com/Yesterday17/pug/api"
-	"github.com/Yesterday17/pug/modules/base"
 	"github.com/Yesterday17/pug/utils/describe"
 )
 
@@ -49,45 +48,6 @@ func NewWorker(desc describe.Described, manager api.ModuleManager) (api.Worker, 
 		return nil, errors.New("no workflow constructed")
 	}
 
-	// Workflow type validation
-	testState := base.NewState()
-	for _, p := range w.flow {
-		v := p.Validate()
-		if v == nil {
-			continue
-		}
-
-		for k, t := range v {
-			// k: key, t: type
-			if len(k) <= 0 {
-				return nil, errors.New("empty validate string")
-			}
-
-			switch k[0] {
-			case '+':
-				testState.Set(k[1:], t)
-				fallthrough
-			case '?':
-				continue
-			case '-', '!':
-				if !testState.Has(k[1:]) {
-					return nil, errors.New("invalid state") // FIXME: description
-				}
-
-				inState, _ := testState.Get(k)
-				if reflect.TypeOf(t).Kind() != reflect.TypeOf(inState).Kind() {
-					return nil, errors.New("state type mismatch") // FIXME: description
-				}
-
-				if k[0] == '-' {
-					testState.Delete(k[1:])
-				}
-			default:
-				return nil, errors.New("invalid control character")
-			}
-		}
-	}
-
 	return w, nil
 }
 
@@ -109,6 +69,52 @@ func (w *worker) Start(input string) error {
 		return errors.New("no matching preprocessor found")
 	}
 
+	// Workflow type validation
+	testState := w.state.Clone()
+	for _, p := range w.flow {
+		v := p.Validate()
+		if v == nil {
+			continue
+		}
+
+		for k, t := range v {
+			// k: key, t: type
+			if len(k) <= 0 {
+				return errors.New("empty validate string")
+			}
+
+			switch k[0] {
+			case '+':
+				testState.Set(k[1:], t)
+				fallthrough
+			case '?':
+				continue
+			case '-', '!':
+				if !testState.Has(k[1:]) {
+					return errors.New("invalid state") // FIXME: description
+				}
+
+				inState, _ := testState.Get(k[1:])
+				if reflect.TypeOf(t).Kind() != reflect.TypeOf(inState).Kind() {
+					return errors.New("state type mismatch") // FIXME: description
+				}
+
+				if k[0] == '-' {
+					testState.Delete(k[1:])
+				}
+			default:
+				return errors.New("invalid control character")
+			}
+		}
+	}
+
+	// Execute
+	for _, p := range w.flow {
+		err = p.Execute(w.state)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
