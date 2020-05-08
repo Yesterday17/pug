@@ -31,5 +31,5 @@ const (
 	// - KAASsS (API Design)
 	// - Seraph Jack (API Design)
 	// - Yesterday17 (API Design & Develop)
-	VERSION = "1.0.7"
+	VERSION = "1.0.8"
 )

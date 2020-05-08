@@ -41,6 +41,9 @@ type ModuleManager interface {
 	// If the module does not exist, it returns nil
 	Module(mid string) Module
 
+	// Modules get all mid of modules
+	Modules() []string
+
 	// Pipe gets constructor of pipe named pid in module named mid
 	// If the module or pipe does not exist, it returns nil
 	Pipe(mid, pid string) PipeConstructor

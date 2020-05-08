@@ -85,6 +85,14 @@ func (m *moduleManager) Module(mid string) api.Module {
 	return module
 }
 
+func (m *moduleManager) Modules() []string {
+	var ret []string
+	for m := range m.modules {
+		ret = append(ret, m)
+	}
+	return ret
+}
+
 func (m *moduleManager) Pipe(mid, pid string) api.PipeConstructor {
 	module := m.Module(mid)
 	if module == nil {
