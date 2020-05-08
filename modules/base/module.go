@@ -65,3 +65,12 @@ func (m *module) Pipe(pid string) (api.PipeConstructor, bool) {
 	p, ok := m.pipes[pid]
 	return p, ok
 }
+
+func (m *module) Pipes() []string {
+	var ret []string
+	for name := range m.pipes {
+		ret = append(ret, name)
+	}
+
+	return ret
+}

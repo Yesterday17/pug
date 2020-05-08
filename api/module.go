@@ -43,8 +43,11 @@ type Module interface {
 	// Preprocessor is used to preprocess input data and generate initial state
 	Preprocessor() Preprocessor
 
-	// Pipe is used to get PipeConstructors by Pipe Id
-	// Pipe Id only need to be unique in module, and should not contain strange characters
+	// Pipe is used to get PipeConstructors by Pipe Id.
+	// Pipe Id only need to be unique in module, and should not contain strange characters.
 	// If the constructor is not found, it returns nil PipeConstructor and false
 	Pipe(pid string) (PipeConstructor, bool)
+
+	// Pipes is used to get name of all available pipes
+	Pipes() []string
 }
