@@ -1,5 +1,6 @@
 .idea
 pug
+cmd
 
 # Media types
 *.mp4
