@@ -3,10 +3,12 @@ package bilibili
 import (
 	"errors"
 	"net/url"
+	"reflect"
 	"strings"
 	"time"
 
 	"github.com/Yesterday17/bili-archive/bilibili"
+	"github.com/Yesterday17/pug/modules/base"
 	"github.com/Yesterday17/pug/utils/log"
 
 	"github.com/Yesterday17/pug/api"
@@ -17,7 +19,9 @@ type loginQrPipe struct {
 	timeout int
 }
 
-func newLoginQrPipe(m map[string]interface{}) (api.Pipe, api.PipeConstructorError) {
+var loginQrPipeBuilder = base.NewPipeBuilder(map[string]reflect.Kind{"timeout": reflect.Int}, nil, newLoginQrPipe)
+
+func newLoginQrPipe(m map[string]interface{}) (api.Pipe, api.PipeBuildError) {
 	timeout, err := types.Int(m, "timeout")
 	if err != api.PipeNoError {
 		timeout = 30

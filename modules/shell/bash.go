@@ -21,13 +21,17 @@ package shell
 import (
 	"os"
 	"os/exec"
+	"reflect"
 
 	"github.com/Yesterday17/pug/api"
+	"github.com/Yesterday17/pug/modules/base"
 	"github.com/Yesterday17/pug/utils/log"
 	"github.com/Yesterday17/pug/utils/types"
 )
 
-func newBashPipe(m map[string]interface{}) (api.Pipe, api.PipeConstructorError) {
+var bashPipeBuilder = base.NewPipeBuilder(map[string]reflect.Kind{"cmd": reflect.String}, nil, newBashPipe)
+
+func newBashPipe(m map[string]interface{}) (api.Pipe, api.PipeBuildError) {
 	cmd, err := types.String(m, "cmd")
 	if err != api.PipeNoError {
 		return nil, err

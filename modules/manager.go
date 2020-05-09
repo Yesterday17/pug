@@ -93,7 +93,7 @@ func (m *moduleManager) Modules() []string {
 	return ret
 }
 
-func (m *moduleManager) Pipe(mid, pid string) api.PipeConstructor {
+func (m *moduleManager) Pipe(mid, pid string) api.PipeBuilder {
 	module := m.Module(mid)
 	if module == nil {
 		return nil

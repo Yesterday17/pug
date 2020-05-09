@@ -24,19 +24,36 @@ SOFTWARE.
 
 package api
 
-type PipeConstructorError int
+import "reflect"
+
+type PipeBuildError int
 
 const (
-	PipeNoError PipeConstructorError = iota
+	PipeNoError PipeBuildError = iota
 	PipeArgumentMissing
 	PipeArgumentTypeMismatch
 	PipeArgumentInvalid
 )
 
-// PipeConstructor is a function to build up a new Pipe
-// It returns a Pipe if arguments given are sufficient
-// Or it should returns nil Pipe and an error
-type PipeConstructor func(map[string]interface{}) (Pipe, PipeConstructorError)
+// PipeBuilder is designed to replace the old PipeConstructor
+// It can be used to build pipe with given arguments
+// Or determine what arguments are necessary
+type PipeBuilder interface {
+	// Build works as the original PipeConstructor
+	// It is a function used to build up a new Pipe.
+	// It returns a Pipe if arguments given are sufficient
+	// Or it should returns nil Pipe and an error
+	Build(map[string]interface{}) (Pipe, PipeBuildError)
+
+	// Accept can be used to determine whether an argument is necessary
+	Accept(key string, t reflect.Kind) bool
+
+	// Must returns a MUST map of arguments
+	Must() map[string]reflect.Kind
+
+	// Optional returns an OPTIONAL map of arguments
+	Optional() map[string]reflect.Kind
+}
 
 // Pipe is the minimal reuse unit in the project.
 // Keep it simple, stupid

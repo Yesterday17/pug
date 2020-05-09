@@ -29,7 +29,7 @@ var Module = base.Module(
 	[]string{"Yesterday17"},
 	"bilibili toolkit",
 	nil,
-	map[string]api.PipeConstructor{
-		"login-qr": newLoginQrPipe,
+	map[string]api.PipeBuilder{
+		"login-qr": loginQrPipeBuilder,
 	},
 )

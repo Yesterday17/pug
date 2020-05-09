@@ -11,7 +11,7 @@ var Module = base.Module(
 	[]string{"Yesterday17"},
 	"",
 	preprocessor,
-	map[string]api.PipeConstructor{
-		"download": newYtdlPipe,
+	map[string]api.PipeBuilder{
+		"download": ytdlPipeBuilder,
 	},
 )

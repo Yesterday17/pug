@@ -20,7 +20,7 @@ package types
 
 import "github.com/Yesterday17/pug/api"
 
-func Assert(m map[string]interface{}, key string) (interface{}, api.PipeConstructorError) {
+func Assert(m map[string]interface{}, key string) (interface{}, api.PipeBuildError) {
 	v, ok := m[key]
 	if !ok {
 		return nil, api.PipeArgumentMissing
@@ -28,7 +28,7 @@ func Assert(m map[string]interface{}, key string) (interface{}, api.PipeConstruc
 	return v, api.PipeNoError
 }
 
-func String(m map[string]interface{}, key string) (string, api.PipeConstructorError) {
+func String(m map[string]interface{}, key string) (string, api.PipeBuildError) {
 	v, err := Assert(m, key)
 	if err != api.PipeNoError {
 		return "", err
@@ -42,7 +42,7 @@ func String(m map[string]interface{}, key string) (string, api.PipeConstructorEr
 	}
 }
 
-func Int(m map[string]interface{}, key string) (int, api.PipeConstructorError) {
+func Int(m map[string]interface{}, key string) (int, api.PipeBuildError) {
 	v, err := Assert(m, key)
 	if err != api.PipeNoError {
 		return 0, err

@@ -32,7 +32,7 @@ type uploadPipe struct {
 	route route
 }
 
-func newUploadPipe(m map[string]interface{}) (api.Pipe, api.PipeConstructorError) {
+func newUploadPipe(m map[string]interface{}) (api.Pipe, api.PipeBuildError) {
 	return nil, 0
 }
 

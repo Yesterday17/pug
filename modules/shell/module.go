@@ -29,7 +29,7 @@ var Module = base.Module(
 	[]string{"Yesterday17"},
 	"",
 	nil,
-	map[string]api.PipeConstructor{
-		"bash": newBashPipe,
+	map[string]api.PipeBuilder{
+		"bash": bashPipeBuilder,
 	},
 )

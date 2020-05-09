@@ -27,10 +27,10 @@ type module struct {
 	usage       string
 
 	preprocessor api.Preprocessor
-	pipes        map[string]api.PipeConstructor
+	pipes        map[string]api.PipeBuilder
 }
 
-func Module(name, description string, author []string, usage string, preprocessor api.Preprocessor, pipes map[string]api.PipeConstructor) api.Module {
+func Module(name, description string, author []string, usage string, preprocessor api.Preprocessor, pipes map[string]api.PipeBuilder) api.Module {
 	return &module{
 		name:         name,
 		description:  description,
@@ -61,7 +61,7 @@ func (m *module) Preprocessor() api.Preprocessor {
 	return m.preprocessor
 }
 
-func (m *module) Pipe(pid string) (api.PipeConstructor, bool) {
+func (m *module) Pipe(pid string) (api.PipeBuilder, bool) {
 	p, ok := m.pipes[pid]
 	return p, ok
 }

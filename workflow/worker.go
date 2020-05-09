@@ -32,12 +32,12 @@ func NewWorker(desc describe.Described, manager api.ModuleManager) (api.Worker, 
 			return nil, errors.New("pipe not found")
 		}
 
-		pc := manager.Pipe(m.(string), p.(string))
-		if pc == nil {
+		pb := manager.Pipe(m.(string), p.(string))
+		if pb == nil {
 			return nil, errors.New("module or pipe not found")
 		}
 
-		pipe, err := pc(root)
+		pipe, err := pb.Build(root)
 		if err != api.PipeNoError {
 			return nil, errors.New("pipe construct error")
 		}

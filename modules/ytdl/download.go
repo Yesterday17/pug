@@ -4,15 +4,19 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"reflect"
 
 	"github.com/Yesterday17/pug/api"
+	"github.com/Yesterday17/pug/modules/base"
 	"github.com/Yesterday17/pug/utils/log"
 )
 
 type ytdlPipe struct {
 }
 
-func newYtdlPipe(m map[string]interface{}) (api.Pipe, api.PipeConstructorError) {
+var ytdlPipeBuilder = base.NewPipeBuilder(map[string]reflect.Kind{"url": reflect.String}, map[string]reflect.Kind{"proxy": reflect.String}, newYtdlPipe)
+
+func newYtdlPipe(m map[string]interface{}) (api.Pipe, api.PipeBuildError) {
 	return &ytdlPipe{}, api.PipeNoError
 }
 
