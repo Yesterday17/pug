@@ -24,7 +24,10 @@ SOFTWARE.
 
 package api
 
-import "reflect"
+import (
+	"reflect"
+	"strconv"
+)
 
 type PipeBuildError int
 
@@ -34,6 +37,10 @@ const (
 	PipeArgumentTypeMismatch
 	PipeArgumentInvalid
 )
+
+func (pe PipeBuildError) Error() string {
+	return strconv.Itoa(int(pe))
+}
 
 // PipeBuilder is designed to replace the old PipeConstructor
 // It can be used to build pipe with given arguments
