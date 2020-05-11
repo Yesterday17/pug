@@ -20,10 +20,10 @@ func newYtdlPipe(m map[string]interface{}) (api.Pipe, api.PipeBuildError) {
 	return &ytdlPipe{}, api.PipeNoError
 }
 
-func (y *ytdlPipe) Validate() map[string]interface{} {
-	return map[string]interface{}{
-		"!url":  "",
-		"+file": "",
+func (y *ytdlPipe) Validate() map[string]reflect.Kind {
+	return map[string]reflect.Kind{
+		"!url":  reflect.String,
+		"+file": reflect.String,
 	}
 }
 

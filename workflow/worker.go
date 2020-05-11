@@ -70,7 +70,12 @@ func (w *worker) Start(input string) error {
 	}
 
 	// Workflow type validation
-	testState := w.state.Clone()
+	testState := map[string]reflect.Kind{}
+	w.state.Range(func(key string, value interface{}) bool {
+		testState[key] = reflect.ValueOf(value).Kind()
+		return false
+	})
+
 	for _, p := range w.flow {
 		v := p.Validate()
 		if v == nil {
@@ -85,22 +90,22 @@ func (w *worker) Start(input string) error {
 
 			switch k[0] {
 			case '+':
-				testState.Set(k[1:], t)
+				testState[k[1:]] = t
 				fallthrough
 			case '?':
 				continue
 			case '-', '!':
-				if !testState.Has(k[1:]) {
+				if _, ok := testState[k[1:]]; !ok {
 					return errors.New("invalid state") // FIXME: description
 				}
 
-				inState, _ := testState.Get(k[1:])
-				if reflect.TypeOf(t).Kind() != reflect.TypeOf(inState).Kind() {
+				inState := testState[k[1:]]
+				if t != inState {
 					return errors.New("state type mismatch") // FIXME: description
 				}
 
 				if k[0] == '-' {
-					testState.Delete(k[1:])
+					delete(testState, k[1:])
 				}
 			default:
 				return errors.New("invalid control character")

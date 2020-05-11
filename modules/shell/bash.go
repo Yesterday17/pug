@@ -47,7 +47,7 @@ type bashPipe struct {
 	command string
 }
 
-func (b *bashPipe) Validate() map[string]interface{} {
+func (b *bashPipe) Validate() map[string]reflect.Kind {
 	return nil
 }
 

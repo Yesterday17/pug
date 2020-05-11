@@ -78,7 +78,8 @@ func (s *state) Delete(key string) {
 	s.state.Delete(key)
 }
 
-func (s *state) Clone() api.State {
-	st := *s.state
-	return &state{state: &st}
+func (s *state) Range(f func(key string, value interface{}) bool) {
+	s.state.Range(func(key, value interface{}) bool {
+		return f(key.(string), value)
+	})
 }

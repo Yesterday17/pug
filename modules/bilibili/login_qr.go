@@ -33,9 +33,9 @@ func newLoginQrPipe(m map[string]interface{}) (api.Pipe, api.PipeBuildError) {
 	return &loginQrPipe{timeout: timeout}, api.PipeNoError
 }
 
-func (l *loginQrPipe) Validate() map[string]interface{} {
-	return map[string]interface{}{
-		"+bili_cookies": url.Values{},
+func (l *loginQrPipe) Validate() map[string]reflect.Kind {
+	return map[string]reflect.Kind{
+		"+bili_cookies": reflect.Map,
 	}
 }
 

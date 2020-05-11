@@ -65,7 +65,7 @@ type PipeBuilder interface {
 // Pipe is the minimal reuse unit in the project.
 // Keep it simple, stupid
 type Pipe interface {
-	// Validate returns a map with string key and interface{} value
+	// Validate returns a map with string key and reflect.Kind Type
 	// If a string begins with '+', it would be ADDED to work state
 	// If a string begins with '-', it would be REMOVED from work state
 	// If a string begins with '!', it is needed by this pipe
@@ -77,7 +77,7 @@ type Pipe interface {
 	// If a string begins with '-' or '!', it MUST exist in the previous state
 	//
 	// If the function returns nil, it means type validation SHOULD be skipped
-	Validate() map[string]interface{}
+	Validate() map[string]reflect.Kind
 
 	// Execute a pipe
 	// Only pipes pass the validation can be executed
